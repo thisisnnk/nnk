@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@font-face {
+  font-family: 'Enigma';
+  src: url('/fonts/Enigma-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes pixelFade {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* ─── Design Tokens — Light (default) ───────────────────────── */
+:root {
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+
+  --bg: #F0F0F0;
+  --surface: #F0F0F0;
+  --surface-2: #F0F0F0;
+  --border: #D4D4D4;
+  --border-strong: #BABABA;
+
+  --text: #0E0E0E;
+  --text-muted: #5C5C5C;
+  --text-dim: #A8A8A8;
+
+  --accent: #00AAFF;
+  --accent-fg: #FFFFFF;
+  --accent-dim: rgba(0, 170, 255, 0.12);
+  --accent-glow: rgba(0, 170, 255, 0.20);
+
+  /* Glass surfaces (liquid glass buttons / nav) */
+  --glass-bg: rgba(255, 255, 255, 0.60);
+  --glass-fill: rgba(245, 245, 245, 0.75);
+  --glass-border: rgba(0, 0, 0, 0.10);
+
+  --bg-rgb: 240, 240, 240;
+
+  /* Legacy aliases — Creatives page compatibility */
+  --font-clash: 'Poppins', sans-serif;
+  --font-cabinet: 'Poppins', sans-serif;
+  --dark: #0E0E0E;
+  --light: #ECECEC;
+  --accent-rgb: 0, 170, 255;
+
+  color-scheme: light;
+}
+
+/* ─── Design Tokens — Dark override ─────────────────────────── */
+html.dark {
+  --bg: #0f0f0f;
+  --surface: #0f0f0f;
+  --surface-2: #0f0f0f;
+  --border: #2A2A2A;
+  --border-strong: #3A3A3A;
+
+  --text: #ECECEC;
+  --text-muted: #8E8E8E;
+  --text-dim: #4D4D4D;
+
+  --glass-bg: rgba(255, 255, 255, 0.045);
+  --glass-fill: rgba(20, 20, 20, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.10);
+
+  --bg-rgb: 15, 15, 15;
+
+  color-scheme: dark;
+}
+
+
+/* ─── Base Reset ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: auto;
+  background-color: var(--bg);
+  color: var(--text);
+  overscroll-behavior: none;
+  transition: background-color 0.4s ease;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  background-color: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+/* Custom cursor only on devices that actually have a fine, hovering pointer.
+   Touch / coarse-pointer devices keep their native cursor. */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+}
+
+/* Keyboard accessibility — visible focus ring (the global cursor:none must
+   never imply focus is invisible). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Respect users who prefer reduced motion: neutralise all animation,
+   parallax, marquees and smooth-scroll easing. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 170, 255, 0.22);
+  color: var(--text);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+
+/* ─── Testimonials infinite scroll ─────────────────────────── */
+@keyframes testimonials-scroll-up {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+.testimonials-col {
+  animation: testimonials-scroll-up 22s linear infinite;
+  will-change: transform;
+}
+.testimonials-col-offset {
+  animation: testimonials-scroll-up 28s linear infinite;
+  animation-delay: -8s;
+  will-change: transform;
+}
+.testimonials-col:hover,
+.testimonials-col-offset:hover {
+  animation-play-state: paused;
+}
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+
+/* ─── Lenis ─────────────────────────────────────────────────── */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
+
+/* ─── Custom Cursor ─────────────────────────────────────────── */
+.cursor-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--text);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+  transition: width 0.14s ease, height 0.14s ease, opacity 0.2s ease;
+}
+.cursor-dot.hovering {
+  width: 7px;
+  height: 7px;
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot { transition: none; }
+}
+
+/* ─── Typography Scale ──────────────────────────────────────── */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(3.75rem, 9vw, 9rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 6.5vw, 6rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.display-md {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  font-weight: 600;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: var(--text);
+}
+.display-sm {
+  font-family: var(--font-display);
+  font-size: clamp(1.625rem, 3vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.label {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.label-muted {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* ─── Apple Liquid Glass Buttons ────────────────────────────── */
+/* Primary — #00AAFF glow tint, frosted blur, gradient overlay.
+   Hover: scale-up spring + glow intensifies.  Click: compress. */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(180deg, rgba(0, 170, 255, 0.42) 0%, rgba(0, 170, 255, 0.20) 100%);
+  border: 1px solid rgba(0, 170, 255, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.30),
+    inset 0 0 18px rgba(0, 170, 255, 0.30),
+    0 4px 24px rgba(0, 170, 255, 0.22);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.28s ease, background 0.28s ease;
+}
+.btn-primary:hover {
+  transform: scale(1.045);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.40),
+    inset 0 0 26px rgba(0, 170, 255, 0.50),
+    0 8px 38px rgba(0, 170, 255, 0.42);
+}
+.btn-primary:active { transform: scale(0.96); }
+
+/* Secondary — neutral frosted glass */
+.btn-secondary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 50%),
+    var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.28s ease, border-color 0.28s ease, color 0.28s ease;
+}
+.btn-secondary:hover {
+  transform: scale(1.04);
+  border-color: rgba(0, 170, 255, 0.55);
+  color: var(--accent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 6px 28px rgba(0, 170, 255, 0.16);
+}
+.btn-secondary:active { transform: scale(0.96); }
+
+/* Floating glass nav surface */
+.glass-nav {
+  background: var(--glass-fill);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* ─── Layout ────────────────────────────────────────────────── */
+.container-pad { padding-left: clamp(1.25rem, 5vw, 5rem); padding-right: clamp(1.25rem, 5vw, 5rem); }
+
+/* Legacy aliases */
+.section-pad { padding-left: clamp(1.25rem, 5vw, 5rem); padding-right: clamp(1.25rem, 5vw, 5rem); }
+.display-heading {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 7rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+/* ─── Ambient background motion ─────────────────────────────── */
+@keyframes meshDriftA {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(6%, -5%) scale(1.18); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+@keyframes meshDriftB {
+  0%   { transform: translate(0, 0) scale(1.1); }
+  50%  { transform: translate(-7%, 6%) scale(0.95); }
+  100% { transform: translate(0, 0) scale(1.1); }
+}
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-mesh-a { animation: meshDriftA 18s ease-in-out infinite; }
+.animate-mesh-b { animation: meshDriftB 22s ease-in-out infinite; }
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 16s ease-in-out infinite;
+}
+
+/* ─── Page Transition ───────────────────────────────────────── */
+.page-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9999;
+  transform: translateY(100%);
+  pointer-events: none;
+}
+
+/* ─── Noise overlay (Creatives page) ────────────────────────── */
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+/* ─── Scrollbar hide ────────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── Utilities ─────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+
+  .bg-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  .bg-glass-accent {
+    background: var(--accent-dim);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 170, 255, 0.12);
+  }
+
+  /* Split text — Creatives page */
+  .split-word { display: inline-block; overflow: hidden; }
+  .split-char { display: inline-block; }
+}
