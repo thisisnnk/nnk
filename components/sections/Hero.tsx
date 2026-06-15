@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion'
 import DotGrid from '@/components/ui/DotGrid'
 import ShinyButton from '@/components/ui/ShinyButton'
+import { gmailCompose } from '@/lib/utils'
 
 const HERO_SIZE = 'clamp(1.25rem, 4.8vw, 5.25rem)'
 const EXIT_DUR  = 0.14
@@ -102,7 +103,7 @@ function CtaWithTooltip() {
       onMouseLeave={() => setHovered(false)}
       onMouseMove={handleMouseMove}
     >
-      <a href="mailto:thenameisnnk@gmail.com?subject=Build%20Your%20System">
+      <a href={gmailCompose('Build Your System')} target="_blank" rel="noopener noreferrer">
         <ShinyButton>Build Your System</ShinyButton>
       </a>
       <AnimatePresence>

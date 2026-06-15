@@ -2,6 +2,8 @@
 import { Fragment, useRef } from 'react'
 import { motion, useInView, type Variants } from 'framer-motion'
 import { testimonials } from '@/lib/data'
+import ShinyButton from '@/components/ui/ShinyButton'
+import { gmailCompose } from '@/lib/utils'
 
 // Word-by-word fade-up
 const wordContainer: Variants = {
@@ -156,7 +158,8 @@ export default function Testimonials() {
             </motion.p>
           </div>
 
-          {/* ── Right: Dual-column auto-scroll marquee ─────────────── */}
+          {/* ── Right: auto-scroll marquee + CTA underneath ─────────── */}
+          <div className="flex flex-col gap-10">
           <motion.div
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
@@ -198,6 +201,24 @@ export default function Testimonials() {
               </div>
             </div>
           </motion.div>
+
+            {/* CTA — sits directly under the testimonials */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="flex justify-center"
+            >
+              <a
+                href={gmailCompose('Build My System')}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Email NNK to build your system"
+              >
+                <ShinyButton>Build My System</ShinyButton>
+              </a>
+            </motion.div>
+          </div>
 
         </div>
       </div>

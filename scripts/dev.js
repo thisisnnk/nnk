@@ -15,7 +15,9 @@ const fs = require('fs')
 const net = require('net')
 const path = require('path')
 
-const PORT = 3002
+// Port is fixed at 3002 by default; override with the PORT env var (e.g.
+// `PORT=3001 npm run dev`) to run a clean server on a different port.
+const PORT = Number(process.env.PORT) || 3002
 const ROOT = path.join(__dirname, '..')
 const NEXT_DIR = path.join(ROOT, '.next')
 const SELF_PID = process.pid

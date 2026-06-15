@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { howISolveProblems } from '@/lib/data'
 import ShinyButton from '@/components/ui/ShinyButton'
+import { gmailCompose } from '@/lib/utils'
 
 /* ── Keyframes (injected once) ──────────────────────────────────────────── */
 const SVG_ANIM = `
@@ -401,7 +402,7 @@ export default function HowISolveProblems() {
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'var(--text-muted)' }}>
             Have a problem worth solving? Let's find the right approach together.
           </p>
-          <a href="mailto:thenameisnnk@gmail.com?subject=Build%20Your%20System" className="flex-shrink-0">
+          <a href={gmailCompose('Build Your System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
             <ShinyButton>Build Your System</ShinyButton>
           </a>
         </div>
@@ -457,7 +458,7 @@ export default function HowISolveProblems() {
             Have a problem worth solving? Let's find the right approach together.
           </p>
           {/* ctaRef marks the page right margin — last card's right edge aligns here */}
-          <a ref={ctaRef} href="mailto:thenameisnnk@gmail.com?subject=Build%20Your%20System" className="flex-shrink-0">
+          <a ref={ctaRef} href={gmailCompose('Build Your System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
             <ShinyButton>Build Your System</ShinyButton>
           </a>
         </div>

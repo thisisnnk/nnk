@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { gmailCompose } from '@/lib/utils'
 
 // MASTER Block 4 — Navigation: Blogs, Creatives, Projects.
 const NAV: [string, string][] = [
@@ -44,7 +45,9 @@ export default function Footer() {
         <motion.div variants={block} className="md:col-span-3 md:order-2">
           <p className="label-muted mb-4">Contact</p>
           <a
-            href="mailto:thenameisnnk@gmail.com"
+            href={gmailCompose()}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-sm cursor-pointer transition-colors duration-200 hover:text-accent"
             style={{ color: 'var(--text-muted)' }}
           >
@@ -57,7 +60,7 @@ export default function Footer() {
           <p className="label-muted mb-4">Social</p>
           <div className="flex flex-col gap-3">
             <a
-              href="https://linkedin.com/in/nnk-design"
+              href="https://www.linkedin.com/in/thenameisnnk/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm cursor-pointer transition-colors duration-200 hover:text-accent"
@@ -66,7 +69,9 @@ export default function Footer() {
               LinkedIn
             </a>
             <a
-              href="mailto:thenameisnnk@gmail.com"
+              href={gmailCompose()}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-sm cursor-pointer transition-colors duration-200 hover:text-accent"
               style={{ color: 'var(--text-muted)' }}
             >

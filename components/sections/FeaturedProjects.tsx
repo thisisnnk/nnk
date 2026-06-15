@@ -170,10 +170,59 @@ export default function FeaturedProjects() {
           }
         }
 
+        // ── Deterministic content blur/opacity from tl.time() ────────────
+        // Frame visibility is already time-derived (syncFrames); the content
+        // blur was NOT — it was left as the RESIDUAL of each rise tween's
+        // onUpdate. So at REST (initial load, or after a scroll settles) a block
+        // the rise never re-blurred could stay sharp on top of the next one →
+        // the overlapping-text bug. (During active scrub the onUpdate fires
+        // every tick, so it looked fine — hence "works while scrolling".) We now
+        // derive every block's blur from tl.time() too, so it is correct at rest
+        // AND in both scroll directions, immune to refresh / immediateRender.
+        const DOCK_DUR = 1.3              // project 0: full-cover → docked
+        const MORPH = 0.35               // project 0: content sharpen-in window
+        const RISE_DUR = 1.1             // each later image's rise
+        const MORPH_START_COVERAGE = 0.5 // text crossover starts at 50% coverage
+        const easeOut = gsap.parseEase(EASE_OUT)
+
+        // Eased coverage of rise k at time t → text-morph progress (0..1).
+        const mpAt = (k: number, t: number) => {
+          const lp = Math.min(1, Math.max(0, (t - frameStarts[k]) / RISE_DUR))
+          const coverage = easeOut(lp) // yPercent 100→0 eased ⇒ coverage = eased progress
+          return Math.min(
+            1,
+            Math.max(0, (coverage - MORPH_START_COVERAGE) / (1 - MORPH_START_COVERAGE))
+          )
+        }
+        // How sharp block i is at time t: 1 = crisp, 0 = fully dissolved.
+        const revealOf = (i: number, t: number) => {
+          // sharpen-IN: rise i for i≥1; the dock+morph window for i=0.
+          const rin =
+            i === 0
+              ? easeOut(Math.min(1, Math.max(0, (t - DOCK_DUR) / MORPH)))
+              : mpAt(i, t)
+          // dissolve-OUT: driven by the NEXT image's rise (if any).
+          const rout = i < FEATURED.length - 1 ? 1 - mpAt(i + 1, t) : 1
+          return Math.min(rin, rout)
+        }
+        // Authoritative: set each block's goo blur from time, then apply the
+        // filter/opacity/visibility for that blur. Called every tick, on every
+        // refresh, and once synchronously at build.
+        const syncContents = () => {
+          const t = tl.time()
+          for (let i = 0; i < contents.length; i++) {
+            if (!gooRefs.current[i]) continue
+            gsap.set(gooRefs.current[i], {
+              attr: { stdDeviation: (1 - revealOf(i, t)) * DISSOLVE },
+            })
+          }
+          syncFilters()
+        }
+
         const tl = gsap.timeline({
           defaults: { ease: EASE },
           onUpdate: () => {
-            syncFilters()
+            syncContents()
             syncFrames()
           },
           scrollTrigger: {
@@ -191,6 +240,7 @@ export default function FeaturedProjects() {
             // never leave a frame full-stage-size or stranded on the stage.
             onRefresh: () => {
               dockFrameGeometry()
+              syncContents()
               syncFrames()
             },
             onUpdate: (self) => {
@@ -199,13 +249,6 @@ export default function FeaturedProjects() {
             },
           },
         })
-
-        // Initial reveal: how long project 0's content sharpens in at the start.
-        const MORPH = 0.35
-        // Per-project content crossover is tied to the next image's COVERAGE of
-        // the one beneath it: the text morph begins once the new image has mapped
-        // this fraction (50%) over the old one, and ends when it is fully mapped.
-        const MORPH_START_COVERAGE = 0.5
 
         FEATURED.forEach((_, i) => {
           const frame = frames[i]
@@ -231,54 +274,36 @@ export default function FeaturedProjects() {
                 width: dockWidth,
                 height: dockHeight,
                 borderRadius: 0,
-                duration: 1.3,
+                duration: DOCK_DUR,
               },
               0
             )
-            // Content sharpens in once the image has docked. The blur filter is
-            // ALWAYS on the element (set in JSX) — we only animate stdDeviation
-            // (0 = crisp, high = blurred). Opacity is derived from the live blur
-            // in syncFilters (blurred = faded), so there's no separate fade tween.
-            tl.to(
-              gooRefs.current[i],
-              { attr: { stdDeviation: 0 }, duration: MORPH, ease: EASE_OUT },
-              0.9
-            )
+            // Content loads ONLY once the image has fully docked (dock ends at
+            // DOCK_DUR), never before. The blur/opacity is driven entirely by
+            // syncContents() from tl.time(); this empty tween only RESERVES the
+            // sharpen-in window on the timeline so the read-hold lands after it.
+            tl.to({}, { duration: MORPH }, DOCK_DUR)
           } else {
             // The previous segment's end is this one's start.
             const base = tl.duration()
             frameStarts[i] = base
 
             // The next image rises from below and overlaps the one beneath it.
-            // The CONTENT crossover is driven from this rise's LIVE COVERAGE in
-            // onUpdate (not a separate tween): the text morph STARTS when the new
-            // image has covered MORPH_START_COVERAGE (50%) of the old one, and
-            // ENDS exactly when the new image is fully mapped over it. Reading the
-            // eased yPercent ties the text to the real visual coverage, so it
-            // stays correct in BOTH scroll directions.
-            // The rise animates ONLY yPercent (self-relative, immune to stage
-            // re-measurement); dock geometry is owned by dockFrameGeometry();
+            // The rise animates ONLY yPercent (the visual image rise; self-
+            // relative, immune to stage re-measurement). The CONTENT crossover it
+            // used to drive here in onUpdate is now derived from tl.time() in
+            // syncContents() — using the SAME eased-coverage formula, but
+            // deterministic at rest and on refresh, which is what fixes the
+            // overlapping-text bug. Dock geometry is owned by dockFrameGeometry();
             // image visibility by syncFrames() — so all revert cleanly on reverse.
             tl.fromTo(
               frame,
               { yPercent: 100 },
               {
                 yPercent: 0,
-                duration: 1.1,
+                duration: RISE_DUR,
                 ease: EASE_OUT,
                 immediateRender: false,
-                onUpdate: () => {
-                  // yPercent 100 = fully below (0% mapped); 0 = fully mapped.
-                  const yp = gsap.getProperty(frame, 'yPercent') as number
-                  const coverage = 1 - yp / 100
-                  // 0 until 50% coverage, then ramps to 1 at full mapping.
-                  const mp = Math.min(
-                    1,
-                    Math.max(0, (coverage - MORPH_START_COVERAGE) / (1 - MORPH_START_COVERAGE))
-                  )
-                  gsap.set(gooRefs.current[i - 1], { attr: { stdDeviation: mp * DISSOLVE } })
-                  gsap.set(gooRefs.current[i], { attr: { stdDeviation: (1 - mp) * DISSOLVE } })
-                },
               },
               base
             )
@@ -288,9 +313,12 @@ export default function FeaturedProjects() {
           tl.to({}, { duration: isLast ? 0.6 : 1.0 })
         })
 
-        // Assert correct frame visibility synchronously now that frameStarts is
-        // populated — frame0 shows on first paint with no hidden-flash, instead
-        // of waiting for the first ScrollTrigger refresh/update tick.
+        // Assert correct frame AND content state synchronously now that
+        // frameStarts is populated — frame0 shows on first paint with no
+        // hidden-flash and every text block starts fully dissolved (so none can
+        // flash over the first image), instead of waiting for the first
+        // ScrollTrigger refresh/update tick.
+        syncContents()
         syncFrames()
 
         return () => {
