@@ -133,20 +133,16 @@ body {
 /* ─── Testimonials infinite scroll ─────────────────────────── */
 @keyframes testimonials-scroll-up {
   from { transform: translateY(0); }
-  to   { transform: translateY(-50%); }
+  to   { transform: translateY(-33.3333%); }
 }
 .testimonials-col {
-  animation: testimonials-scroll-up 22s linear infinite;
+  animation: testimonials-scroll-up 33s linear infinite;
   will-change: transform;
 }
 .testimonials-col-offset {
-  animation: testimonials-scroll-up 28s linear infinite;
-  animation-delay: -8s;
+  animation: testimonials-scroll-up 42s linear infinite;
+  animation-delay: -12s;
   will-change: transform;
-}
-.testimonials-col:hover,
-.testimonials-col-offset:hover {
-  animation-play-state: paused;
 }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
@@ -271,6 +267,33 @@ html.lenis { height: auto; }
 }
 .btn-primary:active { transform: scale(0.96); }
 
+/* Light — solid white background, black font. No glow. */
+.btn-light {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #000;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.28s ease;
+}
+.btn-light:hover {
+  transform: scale(1.045);
+  background: #f0f0f0;
+}
+.btn-light:active { transform: scale(0.96); }
+
 /* Secondary — neutral frosted glass */
 .btn-secondary {
   position: relative;
@@ -375,6 +398,29 @@ html.lenis { height: auto; }
 /* ─── Scrollbar hide ────────────────────────────────────────── */
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ─── AH-CRM IA — left-aligned column chain (rail + ticks) ───── */
+/* Boxes share one left edge; a vertical rail on the left links them,
+   each box hanging off the rail by a short tick at its centre. */
+.ia-chain { position: relative; }
+/* stem dropping from the bus down to the first card (keep height in sync
+   with the columns' paddingTop in AppSitemap) */
+.ia-chain::before {
+  content: ''; position: absolute; left: 0; top: -16px; height: 16px;
+  border-left: 1px solid var(--border-strong);
+}
+.ia-chain > .ia-item { position: relative; padding: 5px 0 5px 15px; }
+.ia-chain > .ia-item::before {
+  content: ''; position: absolute; left: 0; top: 0; height: 50%; width: 11px;
+  border-left: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  border-bottom-left-radius: 6px;
+}
+.ia-chain > .ia-item::after {
+  content: ''; position: absolute; left: 0; top: 50%; bottom: 0;
+  border-left: 1px solid var(--border-strong);
+}
+.ia-chain > .ia-item:last-child::after { display: none; }
 
 /* ─── Utilities ─────────────────────────────────────────────── */
 @layer utilities {

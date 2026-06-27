@@ -14,7 +14,9 @@ export function lerp(start: number, end: number, factor: number) {
  * Gmail's compose window, pre-addressed to NNK — instead of the OS default mail
  * client that a plain `mailto:` would launch.
  */
-export function gmailCompose(subject?: string) {
-  const base = 'https://mail.google.com/mail/?view=cm&fs=1&to=thenameisnnk@gmail.com'
-  return subject ? `${base}&su=${encodeURIComponent(subject)}` : base
+export function gmailCompose(subject?: string, body?: string) {
+  let url = 'https://mail.google.com/mail/?view=cm&fs=1&to=thenameisnnk@gmail.com'
+  if (subject) url += `&su=${encodeURIComponent(subject)}`
+  if (body) url += `&body=${encodeURIComponent(body)}`
+  return url
 }

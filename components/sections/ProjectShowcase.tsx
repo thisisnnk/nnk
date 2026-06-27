@@ -34,17 +34,17 @@ export default function ProjectShowcase({
       transition={{ type: 'spring', stiffness: 58, damping: 15, mass: 0.9 }}
       className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center py-14 md:py-20"
     >
-      {/* Left: mockup image (parallax) */}
+      {/* Left: mockup image */}
       <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group">
-        <motion.div className="absolute inset-[-9%]" style={{ y: imgY, willChange: 'transform' }}>
+        <div className="absolute inset-0">
           <Image
             src={project.mockup}
             alt={project.name}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            className="object-cover object-left-top transition-transform duration-700 group-hover:scale-[1.03]"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
-        </motion.div>
+        </div>
         <div
           className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(120deg, rgba(0,170,255,0.10) 0%, transparent 55%)' }}
@@ -88,7 +88,7 @@ export default function ProjectShowcase({
           <p className="label mb-2.5">Result</p>
           <div className="flex flex-wrap gap-3">
             {project.metrics.map((m, i) => (
-              <div key={i} className="px-4 py-3 rounded-2xl" style={{ border: '1px solid var(--border-strong)' }}>
+              <div key={i} className="flex-1 px-5 py-3 rounded-2xl" style={{ border: '1px solid var(--border-strong)', minWidth: '9rem' }}>
                 <p
                   className="font-display font-bold text-2xl"
                   style={{ color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.02em' }}
@@ -101,7 +101,7 @@ export default function ProjectShowcase({
           </div>
         </div>
 
-        <Link href={`/projects/${project.slug}`} className="btn-primary cursor-pointer w-fit mt-2 group">
+        <Link href={`/projects/${project.slug}`} className="btn-light cursor-pointer w-fit mt-2 group">
           View Details
           <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
         </Link>

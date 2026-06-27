@@ -92,8 +92,9 @@ export default function Testimonials() {
   const inView = useInView(ref, { once: true, margin: '-8%' })
 
   // Split into two columns and triple for a seamless infinite loop
-  const col1 = [testimonials[0], testimonials[2], testimonials[4]]
-  const col2 = [testimonials[1], testimonials[3], testimonials[0]]
+  // Uneven split so the two columns have different heights and never line up row-to-row
+  const col1 = [testimonials[0], testimonials[2], testimonials[3], testimonials[5]]
+  const col2 = [testimonials[1], testimonials[4]]
   const col1Items = [...col1, ...col1, ...col1]
   const col2Items = [...col2, ...col2, ...col2]
 

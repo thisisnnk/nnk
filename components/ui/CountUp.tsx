@@ -11,7 +11,7 @@ export default function CountUp({
   value,
   suffix = '',
   prefix = '',
-  duration = 1.6,
+  duration = 2.3,
   className,
   style,
 }: {

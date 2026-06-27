@@ -27,8 +27,15 @@ export default function CustomCursor() {
     }
     setEnabled(true)
 
+    // Hide the dot while scrolling (the pointer is stationary, so it would
+    // otherwise float over the content like a stray circle) and when the pointer
+    // leaves the window. It reappears the instant the mouse moves again.
+    const show = () => { if (dotRef.current) dotRef.current.style.opacity = '' }
+    const hide = () => { if (dotRef.current) dotRef.current.style.opacity = '0' }
+
     const move = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY }
+      show()
     }
 
     // Event delegation: any element added after mount (route changes, modals,
@@ -47,6 +54,9 @@ export default function CustomCursor() {
     document.addEventListener('mousemove', move)
     document.addEventListener('mouseover', over)
     document.addEventListener('mouseout', out)
+    document.addEventListener('mouseleave', hide)
+    window.addEventListener('scroll', hide, { passive: true })
+    window.addEventListener('wheel', hide, { passive: true })
 
     const tick = () => {
       if (dotRef.current) {
@@ -60,6 +70,9 @@ export default function CustomCursor() {
       document.removeEventListener('mousemove', move)
       document.removeEventListener('mouseover', over)
       document.removeEventListener('mouseout', out)
+      document.removeEventListener('mouseleave', hide)
+      window.removeEventListener('scroll', hide)
+      window.removeEventListener('wheel', hide)
       cancelAnimationFrame(rafRef.current)
     }
   }, [disabled])

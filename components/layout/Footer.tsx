@@ -4,11 +4,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { gmailCompose } from '@/lib/utils'
 
-// MASTER Block 4 — Navigation: Blogs, Creatives, Projects.
 const NAV: [string, string][] = [
-  ['About', '/about'],
   ['Blogs', '/blog'],
-  ['Creatives', '/creatives'],
   ['Projects', '/projects'],
 ]
 
@@ -21,6 +18,44 @@ export default function Footer() {
   // The footer lives beneath the page (fixed, in RevealShell) and is uncovered
   // as the last section slides up. Animate its contents in once revealed.
   const [revealed, setRevealed] = useState(false)
+  const [name, setName] = useState('')
+  const [whatsapp, setWhatsapp] = useState('+')
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error' | 'invalid'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!name.trim() || status === 'sending') return
+    // Require a country code: leading "+" followed by at least 8 digits.
+    if (!/^\+\d{8,15}$/.test(whatsapp.replace(/[\s-]/g, ''))) {
+      setStatus('invalid')
+      return
+    }
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
+          subject: 'New enquiry from portfolio',
+          from_name: 'NNK Portfolio',
+          name: name.trim(),
+          'WhatsApp Number': whatsapp.trim(),
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setStatus('sent')
+        setName('')
+        setWhatsapp('+')
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
   useEffect(() => {
     const onScroll = () => {
       const distanceFromBottom =
@@ -41,22 +76,8 @@ export default function Footer() {
         variants={{ show: { transition: { staggerChildren: 0.1 } } }}
         className="relative container-pad pt-20 pb-10 grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-8"
       >
-        {/* Block 2 · Contact */}
-        <motion.div variants={block} className="md:col-span-3 md:order-2">
-          <p className="label-muted mb-4">Contact</p>
-          <a
-            href={gmailCompose()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm cursor-pointer transition-colors duration-200 hover:text-accent"
-            style={{ color: 'var(--text-muted)' }}
-          >
-            thenameisnnk@gmail.com
-          </a>
-        </motion.div>
-
         {/* Block 3 · Social */}
-        <motion.div variants={block} className="md:col-span-3 md:order-3">
+        <motion.div variants={block} className="md:col-span-3 md:order-2">
           <p className="label-muted mb-4">Social</p>
           <div className="flex flex-col gap-3">
             <a
@@ -77,11 +98,22 @@ export default function Footer() {
             >
               Gmail
             </a>
+            <a
+              href={`https://wa.me/917339648320?text=${encodeURIComponent(
+                "Hi NNK, I'd like to discuss developing a system. Could we talk?"
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm cursor-pointer transition-colors duration-200 hover:text-accent"
+              style={{ color: 'var(--text-muted)' }}
+            >
+              WhatsApp
+            </a>
           </div>
         </motion.div>
 
         {/* Block 4 · Navigation */}
-        <motion.nav variants={block} className="md:col-span-2 md:order-4">
+        <motion.nav variants={block} className="md:col-span-2 md:order-3">
           <p className="label-muted mb-4">Navigation</p>
           <div className="flex flex-col gap-3">
             {NAV.map(([label, href]) => (
@@ -96,6 +128,54 @@ export default function Footer() {
             ))}
           </div>
         </motion.nav>
+
+        {/* Block 5 · Quick enquiry form */}
+        <motion.div variants={block} className="col-span-2 md:col-span-3 md:order-4">
+          <p className="label-muted mb-4">Get in touch</p>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-xs">
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Name"
+              className="w-full rounded-2xl px-4 py-3 text-sm bg-transparent border outline-none transition-colors duration-200 focus:border-accent"
+              style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
+            />
+            <input
+              type="tel"
+              required
+              value={whatsapp}
+              onChange={(e) => setWhatsapp(e.target.value)}
+              placeholder="WhatsApp (with country code)"
+              className="w-full rounded-2xl px-4 py-3 text-sm bg-transparent border outline-none transition-colors duration-200 focus:border-accent"
+              style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
+            />
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full rounded-2xl px-4 py-3 text-base font-bold uppercase tracking-wide cursor-pointer transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{ background: 'var(--accent)', color: 'var(--bg)', fontFamily: 'var(--font-display)' }}
+            >
+              {status === 'sending' ? 'Sending…' : 'Submit'}
+            </button>
+            {status === 'sent' && (
+              <p className="text-xs" style={{ color: 'var(--accent)' }}>
+                Thanks — NNK will be in touch shortly.
+              </p>
+            )}
+            {status === 'invalid' && (
+              <p className="text-xs" style={{ color: '#ff5470' }}>
+                Add your country code, e.g. +91 98765 43210.
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="text-xs" style={{ color: '#ff5470' }}>
+                Something went wrong. Please try again.
+              </p>
+            )}
+          </form>
+        </motion.div>
 
         {/* Block 1 · Brand / Statement — bottom left, name at the very bottom */}
         <motion.div variants={block} className="col-span-2 md:col-span-4 md:order-1 flex flex-col justify-start">

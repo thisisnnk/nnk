@@ -1,5 +1,5 @@
 'use client'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { gsap } from 'gsap'
@@ -8,6 +8,7 @@ import { useGSAP } from '@gsap/react'
 import { ArrowUpRight } from 'lucide-react'
 import { projects } from '@/lib/data'
 import ProjectShowcase from './ProjectShowcase'
+import { TextScramble } from '@/components/ui/TextScramble'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -37,18 +38,17 @@ export default function FeaturedProjects() {
   const stageRef = useRef<HTMLDivElement>(null)
   const frameRefs = useRef<HTMLDivElement[]>([])
   const contentRefs = useRef<HTMLDivElement[]>([])
-  // One gaussian-blur node per project's goo filter — the timeline animates its
-  // stdDeviation to melt/reform the whole content block (pure goo, no fade).
-  const gooRefs = useRef<SVGFEGaussianBlurElement[]>([])
+
+  // Which case study is currently the most-visible one on the stage. Used to
+  // re-fire the text-scramble reveal each time a project docks into view.
+  const [activeIndex, setActiveIndex] = useState(-1)
+  const activeIndexRef = useRef(-1)
 
   const setFrame = (el: HTMLDivElement | null, i: number) => {
     if (el) frameRefs.current[i] = el
   }
   const setContent = (el: HTMLDivElement | null, i: number) => {
     if (el) contentRefs.current[i] = el
-  }
-  const setGoo = (el: SVGFEGaussianBlurElement | null, i: number) => {
-    if (el) gooRefs.current[i] = el
   }
 
   useGSAP(
@@ -77,8 +77,20 @@ export default function FeaturedProjects() {
         // Frames default to full-viewport (CSS); the timeline drives box+slide.
         // visibility is OWNED by syncFrames() from here on — never by a tween's
         // autoAlpha — so it reverts perfectly under reverse scrub.
-        gsap.set(frames, { x: 0, y: 0, borderRadius: 0, transformOrigin: '50% 50%' })
-        gsap.set(contents, { yPercent: -50, autoAlpha: 0 })
+        // clipPath default = fully revealed; the rise tween owns the wipe and
+        // syncFrames() owns visibility, so a not-yet-active frame defaulting to
+        // full reveal is harmless (it's hidden until it becomes active).
+        gsap.set(frames, {
+          x: 0,
+          y: 0,
+          borderRadius: 0,
+          transformOrigin: '50% 50%',
+          clipPath: 'inset(0% 0% 0% 0%)',
+        })
+        // Anchor content by its TOP edge (yPercent 0), not its centre, so the
+        // "UX / UI CASE STUDY" kicker lands at the same Y for every project
+        // regardless of body height — no per-project vertical drift.
+        gsap.set(contents, { yPercent: 0, autoAlpha: 0 })
 
         // Dock geometry for the non-first frames lives OUTSIDE the rise tween —
         // applied here and re-applied on every ScrollTrigger refresh. The rise
@@ -132,53 +144,10 @@ export default function FeaturedProjects() {
           }
         }
 
-        // The ONLY thing that changes the content is the goo filter's blur. The
-        // blur lives INSIDE the SVG filter (blur → alpha-threshold in one pass),
-        // so the eye never sees soft haze — only hard liquid blobs. stdDeviation
-        // DISSOLVE = fully melted/invisible (alpha spread under the cutoff). No
-        // opacity, no slide, no per-element blur leak.
-        const DISSOLVE = 16
-        gooRefs.current.forEach((b) => gsap.set(b, { attr: { stdDeviation: DISSOLVE } }))
-
-        // The alpha-threshold filter hardens anti-aliased edges, so it must NOT
-        // stay on once a block is at rest — that's what made resting text look
-        // chunky. We toggle each block's `filter` purely from its live blur:
-        // crisp (filter off, normal smooth AA) while essentially unblurred, goo
-        // (filter on) the moment it starts to melt/reform. Driving this from the
-        // timeline's onUpdate makes it deterministic in BOTH scroll directions —
-        // no reliance on string-property set/revert under scrub.
-        const CRISP_BELOW = 0.4
-        const filterState: string[] = contents.map(() => '')
-        const syncFilters = () => {
-          for (let idx = 0; idx < contents.length; idx++) {
-            const node = gooRefs.current[idx]
-            if (!node) continue
-            const std = parseFloat(node.getAttribute('stdDeviation') || '0')
-            const want = std < CRISP_BELOW ? 'none' : 'goo'
-            if (filterState[idx] !== want) {
-              filterState[idx] = want
-              contents[idx].style.filter = want === 'none' ? 'none' : `url(#fp-goo-${idx})`
-            }
-            // Opacity is tied directly to the live blur: blurred = faded, crisp =
-            // solid. This guarantees the text is never a bright, fully-opaque
-            // blurred blob (no glow at peak blur), and stays deterministic under
-            // scrub in BOTH directions. Visibility hides fully-blurred blocks so
-            // their links can't intercept clicks.
-            const op = Math.max(0, Math.min(1, 1 - std / DISSOLVE))
-            contents[idx].style.opacity = String(op)
-            contents[idx].style.visibility = op <= 0.001 ? 'hidden' : 'visible'
-          }
-        }
-
-        // ── Deterministic content blur/opacity from tl.time() ────────────
-        // Frame visibility is already time-derived (syncFrames); the content
-        // blur was NOT — it was left as the RESIDUAL of each rise tween's
-        // onUpdate. So at REST (initial load, or after a scroll settles) a block
-        // the rise never re-blurred could stay sharp on top of the next one →
-        // the overlapping-text bug. (During active scrub the onUpdate fires
-        // every tick, so it looked fine — hence "works while scrolling".) We now
-        // derive every block's blur from tl.time() too, so it is correct at rest
-        // AND in both scroll directions, immune to refresh / immediateRender.
+        // ── Deterministic content opacity from tl.time() ─────────────────
+        // Each block's reveal (0..1) is derived purely from the timeline time,
+        // so it is correct at rest AND in both scroll directions, immune to
+        // refresh / immediateRender. A plain opacity crossfade — no blur.
         const DOCK_DUR = 1.3              // project 0: full-cover → docked
         const MORPH = 0.35               // project 0: content sharpen-in window
         const RISE_DUR = 1.1             // each later image's rise
@@ -188,35 +157,63 @@ export default function FeaturedProjects() {
         // Eased coverage of rise k at time t → text-morph progress (0..1).
         const mpAt = (k: number, t: number) => {
           const lp = Math.min(1, Math.max(0, (t - frameStarts[k]) / RISE_DUR))
-          const coverage = easeOut(lp) // yPercent 100→0 eased ⇒ coverage = eased progress
+          const coverage = easeOut(lp) // clip wipe 100%→0% eased ⇒ coverage = eased progress
           return Math.min(
             1,
             Math.max(0, (coverage - MORPH_START_COVERAGE) / (1 - MORPH_START_COVERAGE))
           )
         }
-        // How sharp block i is at time t: 1 = crisp, 0 = fully dissolved.
+        // Sequential crossfade: the outgoing block fully clears (mp 0→0.5)
+        // BEFORE the incoming block fades in (mp 0.5→1), so two project
+        // contents are never visible on the same spot at once — no stacked text.
+        const CROSS = 0.5
+        const fadeOut = (mp: number) => 1 - Math.min(1, mp / CROSS)
+        const fadeIn = (mp: number) =>
+          Math.min(1, Math.max(0, (mp - CROSS) / (1 - CROSS)))
+        // How visible block i is at time t: 1 = solid, 0 = faded out.
         const revealOf = (i: number, t: number) => {
-          // sharpen-IN: rise i for i≥1; the dock+morph window for i=0.
+          // fade-IN: rise i for i≥1; the dock+morph window for i=0.
           const rin =
             i === 0
               ? easeOut(Math.min(1, Math.max(0, (t - DOCK_DUR) / MORPH)))
-              : mpAt(i, t)
-          // dissolve-OUT: driven by the NEXT image's rise (if any).
-          const rout = i < FEATURED.length - 1 ? 1 - mpAt(i + 1, t) : 1
+              : fadeIn(mpAt(i, t))
+          // fade-OUT: driven by the NEXT image's rise (if any).
+          const rout = i < FEATURED.length - 1 ? fadeOut(mpAt(i + 1, t)) : 1
           return Math.min(rin, rout)
         }
-        // Authoritative: set each block's goo blur from time, then apply the
-        // filter/opacity/visibility for that blur. Called every tick, on every
-        // refresh, and once synchronously at build.
+        // Authoritative: set each block's opacity/visibility from time. Called
+        // every tick, on every refresh, and once synchronously at build.
+        // A block is only shown once its reveal clears this threshold — i.e.
+        // once its image has actually docked / wiped in. Below it, NO content is
+        // shown, so nothing overlaps a full-cover or mid-transition image.
+        const SHOW_AT = 0.5
         const syncContents = () => {
           const t = tl.time()
+          // Pick the single most-visible block from the (still-gradual) reveal
+          // curve — that's the crossover point — but DON'T fade.
+          let best = -1
+          let bestReveal = SHOW_AT
           for (let i = 0; i < contents.length; i++) {
-            if (!gooRefs.current[i]) continue
-            gsap.set(gooRefs.current[i], {
-              attr: { stdDeviation: (1 - revealOf(i, t)) * DISSOLVE },
-            })
+            const r = Math.max(0, Math.min(1, revealOf(i, t)))
+            if (r > bestReveal) {
+              bestReveal = r
+              best = i
+            }
           }
-          syncFilters()
+          // best === -1 ⇒ no block has docked yet (or we're mid-transition) ⇒
+          // show nothing. Otherwise snap the active block on, all others off.
+          for (let i = 0; i < contents.length; i++) {
+            const on = i === best
+            contents[i].style.opacity = on ? '1' : '0'
+            contents[i].style.visibility = on ? 'visible' : 'hidden'
+          }
+          // Promote the active block → re-triggers its scramble. Only commit to
+          // React state on an actual change so the per-tick scroll updates don't
+          // thrash re-renders. (-1 = nothing active → no scramble triggered.)
+          if (best !== activeIndexRef.current) {
+            activeIndexRef.current = best
+            setActiveIndex(best)
+          }
         }
 
         const tl = gsap.timeline({
@@ -288,19 +285,20 @@ export default function FeaturedProjects() {
             const base = tl.duration()
             frameStarts[i] = base
 
-            // The next image rises from below and overlaps the one beneath it.
-            // The rise animates ONLY yPercent (the visual image rise; self-
-            // relative, immune to stage re-measurement). The CONTENT crossover it
-            // used to drive here in onUpdate is now derived from tl.time() in
-            // syncContents() — using the SAME eased-coverage formula, but
-            // deterministic at rest and on refresh, which is what fixes the
-            // overlapping-text bug. Dock geometry is owned by dockFrameGeometry();
+            // The next image is REVEALED (not slid) over the one beneath it: it
+            // sits in its final docked box and a clip-path wipe uncovers it from
+            // the BOTTOM edge upward (inset top 100%→0%). The image content never
+            // translates, so it reads as an unveiling rather than a slide. The
+            // wipe animates ONLY clipPath (self-relative, immune to stage
+            // re-measurement). The CONTENT crossover is derived from tl.time() in
+            // syncContents() using the SAME eased-coverage formula — deterministic
+            // at rest and on refresh. Dock geometry is owned by dockFrameGeometry();
             // image visibility by syncFrames() — so all revert cleanly on reverse.
             tl.fromTo(
               frame,
-              { yPercent: 100 },
+              { clipPath: 'inset(100% 0% 0% 0%)' },
               {
-                yPercent: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
                 duration: RISE_DUR,
                 ease: EASE_OUT,
                 immediateRender: false,
@@ -338,33 +336,6 @@ export default function FeaturedProjects() {
           aren't HTML-escaped by React (which would break hydration). */}
       <style dangerouslySetInnerHTML={{ __html: FP_CSS }} />
 
-      {/* Self-contained blur filters — one per project. A plain Gaussian blur
-          (no alpha threshold), so the content reveals as a soft blur transition.
-          The timeline animates each filter's stdDeviation to blur the content
-          out / sharpen it back in. The wide filter region keeps the blurred
-          content from being clipped at peak blur. */}
-      <svg className="fp-defs" aria-hidden="true" focusable="false">
-        <defs>
-          {FEATURED.map((_, i) => (
-            <filter
-              key={i}
-              id={`fp-goo-${i}`}
-              x="-25%"
-              y="-25%"
-              width="150%"
-              height="150%"
-              colorInterpolationFilters="sRGB"
-            >
-              <feGaussianBlur
-                ref={(el) => setGoo(el, i)}
-                in="SourceGraphic"
-                stdDeviation="0"
-              />
-            </filter>
-          ))}
-        </defs>
-      </svg>
-
       {/* ── Desktop cinematic stage — heading stays pinned above the project ── */}
       <div className="fp-cinematic">
         <div ref={pinRef} className="fp-pin">
@@ -394,38 +365,56 @@ export default function FeaturedProjects() {
                   fill
                   priority={i === 0}
                   loading={i === 0 ? undefined : 'eager'}
-                  className="object-cover"
+                  className="object-cover object-left-top"
                   sizes="100vw"
                 />
-                <div className="fp-frame-glow" />
                 <span className="fp-frame-index">{String(i + 1).padStart(2, '0')}</span>
-                {/* Vertical rule lines on the image's left & right edges. */}
-                <span className="fp-frame-edge fp-frame-edge-l" />
-                <span className="fp-frame-edge fp-frame-edge-r" />
               </div>
             ))}
 
-            {/* Content layer — the goo filter is toggled on/off per block by the
-                timeline's onUpdate, based on each block's live blur: ON while
-                melting/forming (liquid), OFF at rest so text keeps its normal
-                smooth anti-aliasing (no hardened edges). */}
+            {/* Content layer — each block's opacity/visibility is driven by the
+                timeline's onUpdate (syncContents) for a deterministic crossfade
+                in both scroll directions. */}
             {FEATURED.map((p, i) => (
               <div key={p.slug} ref={(el) => setContent(el, i)} className="fp-content">
               <span data-reveal className="label">
                 {p.category}
               </span>
-              <h3 data-reveal className="display-md fp-title">
+              <TextScramble
+                as="h3"
+                data-reveal
+                className="display-md fp-title"
+                trigger={activeIndex === i}
+                duration={0.7}
+                speed={0.03}
+              >
                 {p.name}
-              </h3>
+              </TextScramble>
 
               <div data-reveal>
                 <p className="label mb-1.5">Problem</p>
-                <p className="fp-body">{p.problem}</p>
+                <TextScramble
+                  as="p"
+                  className="fp-body"
+                  trigger={activeIndex === i}
+                  duration={1}
+                  speed={0.012}
+                >
+                  {p.problem}
+                </TextScramble>
               </div>
 
               <div data-reveal>
                 <p className="label mb-1.5">Solution</p>
-                <p className="fp-body">{p.solution}</p>
+                <TextScramble
+                  as="p"
+                  className="fp-body"
+                  trigger={activeIndex === i}
+                  duration={1}
+                  speed={0.012}
+                >
+                  {p.solution}
+                </TextScramble>
               </div>
 
               <div data-reveal>
@@ -434,16 +423,31 @@ export default function FeaturedProjects() {
                   {p.metrics.map((m, mi) => (
                     <div
                       key={mi}
-                      className="px-4 py-3 rounded-2xl"
-                      style={{ border: '1px solid var(--border-strong)' }}
+                      className="flex-1 px-5 py-3 rounded-2xl"
+                      style={{
+                        border: '1px solid var(--border-strong)',
+                        flexGrow: p.slug === 'ah-itinerary' && mi === 0 ? 1.7 : undefined,
+                        flexBasis: p.slug === 'ah-itinerary' ? 0 : undefined,
+                        minWidth:
+                          p.slug === 'ah-itinerary' ? (mi === 0 ? '11rem' : '8rem') : '9rem',
+                      }}
                     >
-                      <p
+                      <TextScramble
+                        as="p"
                         className="font-display font-bold text-2xl"
-                        style={{ color: 'var(--accent)', lineHeight: 1, letterSpacing: '-0.02em' }}
+                        trigger={activeIndex === i}
+                        duration={0.6}
+                        speed={0.025}
+                        style={{
+                          color: 'var(--accent)',
+                          lineHeight: 1,
+                          letterSpacing: '-0.02em',
+                          whiteSpace:
+                            p.slug === 'ah-itinerary' && mi === 0 ? 'nowrap' : undefined,
+                        }}
                       >
-                        {m.value}
-                        {m.suffix}
-                      </p>
+                        {`${m.value}${m.suffix}`}
+                      </TextScramble>
                       <p className="label-muted mt-1">{m.label}</p>
                     </div>
                   ))}
@@ -453,7 +457,7 @@ export default function FeaturedProjects() {
               <Link
                 data-reveal
                 href={`/projects/${p.slug}`}
-                className="btn-primary cursor-pointer w-fit mt-1 group"
+                className="btn-light cursor-pointer w-fit mt-1 group"
               >
                 View Details
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
@@ -582,22 +586,29 @@ const FP_CSS = `
 
 .fp-content {
   position: absolute;
-  /* Vertically centred on the image (which now docks high in the stage). */
-  top: 46.5%;
+  /* Overlay the image's exact vertical band (dockTop 1.5% → dockHeight 90%) and
+     vertically centre the content within it (justify-content:center), so every
+     project's block is centre-aligned with the image — image centre and content
+     centre both land at ~46.5% of the stage. Paired with yPercent:0 in JS. */
+  top: 1.5%;
+  height: 90%;
   left: 52%;
   /* Right edge aligns with the "PROJECTS" nav text:
      nav padding clamp(...) + the link's own px-4 (1rem). */
   right: calc(clamp(1.25rem, 5vw, 5rem) + 1rem);
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 1.25rem;
   visibility: hidden;
-  will-change: transform, opacity, filter;
+  will-change: opacity;
+  /* Whole-block fade-in when the active project's content snaps on (after the
+     image docks). syncContents() toggles opacity 0↔1; this eases the rise so
+     the content gently fades in (in tandem with the text-scramble). */
+  transition: opacity 1.2s ease;
   /* Above both the grid and the image layers. */
   z-index: 3;
 }
-.fp-content [data-reveal] { will-change: opacity, filter; }
-.fp-defs { position: absolute; width: 0; height: 0; }
 .fp-title { font-size: clamp(2rem, 3.4vw, 3.25rem); }
 .fp-body {
   font-size: 0.95rem;

@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useSpring } from 'framer-motion'
 import { LetterSwapPingPong } from '@/components/ui/LetterSwap'
 
 const LINKS = [
@@ -10,6 +10,14 @@ const LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname()
+
+  // Page scroll progress (0 → 1). Smoothed so the bar glides instead of jittering.
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 })
+
+  // Only show the reading-progress line on a project detail page (/projects/<slug>),
+  // not on the listing page (/projects) or elsewhere.
+  const showProgress = pathname.startsWith('/projects/')
 
   return (
     <motion.nav
@@ -20,13 +28,27 @@ export default function Navbar() {
       style={{
         paddingLeft: 'clamp(1.25rem, 5vw, 5rem)',
         paddingRight: 'clamp(1.25rem, 5vw, 5rem)',
-        background: 'linear-gradient(to bottom, rgba(15,15,15,0.92) 0%, rgba(15,15,15,0.55) 40%, rgba(15,15,15,0.15) 70%, transparent 100%)',
       }}
     >
+      {/* Reading progress — pinned to the very top edge, spans full width past the padding */}
+      {showProgress && (
+        <motion.div
+          aria-hidden
+          className="absolute top-0 left-0 right-0"
+          style={{
+            scaleX: progress,
+            transformOrigin: '0%',
+            height: '2px',
+            background: 'var(--accent)',
+            boxShadow: '0 0 8px rgba(0,170,255,0.55)',
+          }}
+        />
+      )}
+
       {/* Logo */}
       <Link href="/" className="group cursor-pointer">
         <img
-          src="/nnk-logo.png"
+          src="/nnk-logo-transparent.png"
           alt="NNK"
           style={{ height: '1.25rem', width: 'auto', display: 'block' }}
         />

@@ -21,13 +21,13 @@ const LINE_1: { w: string; accent: boolean }[] = [
   { w: 'solve',    accent: false },
 ]
 
-// ─── Blur-stagger helpers ─────────────────────────────────────────────────────
-const blurLetter = {
-  hidden: { opacity: 0, filter: 'blur(12px)' },
-  show:   { opacity: 1, filter: 'blur(0px)'  },
+// ─── Word slide-up stagger helpers ─────────────────────────────────────────────────────
+const wordReveal = {
+  hidden: { opacity: 0, y: '0.6em' },
+  show:   { opacity: 1, y: 0 },
 }
 
-function blurContainer(delayChildren: number) {
+function staggerContainer(delayChildren: number) {
   return {
     hidden: { opacity: 0 },
     show: {
@@ -36,30 +36,13 @@ function blurContainer(delayChildren: number) {
         // Snap the parent visible only once the stagger begins —
         // prevents children (e.g. cycling word box) appearing early.
         opacity: { delay: delayChildren, duration: 0 },
-        staggerChildren: 0.03,
+        staggerChildren: 0.2,
         delayChildren,
       },
     },
   }
 }
 
-// Splits a string into individually animated blur-stagger spans
-function BlurChars({ text }: { text: string }) {
-  return (
-    <>
-      {text.split('').map((char, i) => (
-        <motion.span
-          key={i}
-          variants={blurLetter}
-          transition={{ duration: 0.5 }}
-          style={{ display: 'inline-block' }}
-        >
-          {char === ' ' ? ' ' : char}
-        </motion.span>
-      ))}
-    </>
-  )
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -160,21 +143,27 @@ export default function Hero() {
           {/* Line 1 — single container so stagger runs across all words */}
           <motion.span
             className="block whitespace-nowrap"
-            variants={blurContainer(0.5)}
+            variants={staggerContainer(0.5)}
             initial="hidden"
             animate="show"
           >
             {LINE_1.map((word, wi) => (
-              <span key={wi} className="inline-block mr-[0.25em]" style={wordStyle(word.accent)}>
-                <BlurChars text={word.w} />
-              </span>
+              <motion.span
+                key={wi}
+                variants={wordReveal}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-block mr-[0.25em]"
+                style={wordStyle(word.accent)}
+              >
+                {word.w}
+              </motion.span>
             ))}
           </motion.span>
 
           {/* Line 2 — cycling word box + CHALLENGES */}
           <motion.span
             className="block mt-2 text-center"
-            variants={blurContainer(1.2)}
+            variants={staggerContainer(1.2)}
             initial="hidden"
             animate="show"
           >
@@ -219,13 +208,14 @@ export default function Hero() {
                 </motion.span>
               </motion.span>
 
-              {/* CHALLENGES — char stagger */}
+              {/* CHALLENGES — word slide-up */}
               <motion.span
                 layout
-                transition={{ layout: { duration: ENTER_DUR, ease: E_OUT } }}
+                variants={wordReveal}
+                transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], layout: { duration: ENTER_DUR, ease: E_OUT } }}
                 style={{ ...wordStyle(false), flexShrink: 0 }}
               >
-                <BlurChars text="CHALLENGES" />
+                CHALLENGES
               </motion.span>
 
             </span>
