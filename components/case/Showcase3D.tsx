@@ -10,6 +10,7 @@ import {
 } from 'framer-motion'
 import TiltCard from '@/components/case/TiltCard'
 import { Illustration3D } from '@/components/case/Illustration3D'
+import ImageLightbox from '@/components/ui/ImageLightbox'
 
 type ShowcaseKind = 'browser' | 'window' | 'phone' | 'plain'
 
@@ -263,12 +264,14 @@ function Media({
       style={{ aspectRatio: ratio, background: 'var(--surface)' }}
     >
       {src ? (
-        <img
-          src={src}
-          alt={altText}
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
+        <ImageLightbox src={src} alt={altText}>
+          <img
+            src={src}
+            alt={altText}
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </ImageLightbox>
       ) : (
         <Placeholder label={label} illustration={illustration} kind={kind} />
       )}

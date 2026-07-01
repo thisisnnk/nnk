@@ -1311,6 +1311,13 @@ const AH_ITINERARY: CaseStudy = {
   idea: {
     intro:
       'The solution was a guided itinerary builder: a 4-step wizard that takes a consultant from a blank screen to a professional, branded PDF in under 12 minutes — with reusable content blocks, automatic code generation, and a live analytics dashboard for the business.',
+    wireframes: [
+      '/screenshots/ah-itinerary/wireframes/wireframe-01.png',
+      '/screenshots/ah-itinerary/wireframes/wireframe-02.png',
+      '/screenshots/ah-itinerary/wireframes/wireframe-03.png',
+      '/screenshots/ah-itinerary/wireframes/wireframe-04.png',
+      '/screenshots/ah-itinerary/wireframes/wireframe-05.png',
+    ],
     ia: {
       intro:
         'The application has 6 flat routes — no nested hierarchies, every page reachable from the top navigation. Behind them sits a deliberately flat data model: complex nested data (day plans, pricing, notes) is stored as JSONB, so there are no joins for what is essentially document data.',

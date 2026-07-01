@@ -11,6 +11,7 @@ import {
 } from 'framer-motion'
 import { RevealHeading, RevealText } from '@/components/case/Reveal'
 import TiltCard from '@/components/case/TiltCard'
+import ImageLightbox from '@/components/ui/ImageLightbox'
 
 /* ── Types ───────────────────────────────────────────────────── */
 
@@ -191,12 +192,14 @@ export default function CaseHero({ project }: CaseHeroProps) {
                   />
                 </div>
                 <div className="relative aspect-[16/10] w-full">
-                  <img
-                    src={project.mockup}
-                    alt={`${project.name} interface preview`}
-                    loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover object-left-top"
-                  />
+                  <ImageLightbox src={project.mockup} alt={`${project.name} interface preview`}>
+                    <img
+                      src={project.mockup}
+                      alt={`${project.name} interface preview`}
+                      loading="lazy"
+                      className="absolute inset-0 h-full w-full object-cover object-left-top"
+                    />
+                  </ImageLightbox>
                 </div>
               </div>
             </TiltCard>
@@ -205,8 +208,12 @@ export default function CaseHero({ project }: CaseHeroProps) {
       </div>
 
       {/* ── Content ───────────────────────────────────────────── */}
-      <div className="container-pad relative z-10 flex min-h-[92vh] flex-col justify-end pb-16 pt-28 lg:pb-20">
-        <div className="w-full max-w-2xl">
+      {/* pointer-events-none here: this shell is full-width/height (min-h-[92vh])
+          but the actual copy is capped at max-w-2xl below, so without this the
+          empty right-hand portion of the box would sit above the floating
+          mockup (z-10 vs its z-[5]) and silently swallow clicks meant for it. */}
+      <div className="container-pad relative z-10 flex min-h-[92vh] flex-col justify-end pb-16 pt-28 lg:pb-20 pointer-events-none">
+        <div className="w-full max-w-2xl pointer-events-auto">
           {/* Back link */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 10 }}

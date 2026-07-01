@@ -8,6 +8,8 @@ import { useGSAP } from '@gsap/react'
 import { ArrowUpRight } from 'lucide-react'
 import { projects } from '@/lib/data'
 import ProjectShowcase from './ProjectShowcase'
+import { BrowserChrome } from '@/components/ui/BrowserFrame'
+import ImageLightbox from '@/components/ui/ImageLightbox'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -91,6 +93,11 @@ export default function FeaturedProjects() {
       mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
         const frames = frameRefs.current
         const count = FEATURED.length
+        // Window corner radius — applied to the frame's box in every state
+        // (full-cover, dock, rise). GSAP owns border-radius inline, so it must
+        // be set here rather than in CSS; the frame's overflow:hidden then
+        // rounds the chrome + screenshot to match. Motion/timing is unchanged.
+        const FRAME_RADIUS = 16
 
         // Geometry — re-evaluated on every ScrollTrigger.refresh (resize-safe).
         // Frames live inside the STAGE (the area below the pinned heading), so
@@ -114,7 +121,7 @@ export default function FeaturedProjects() {
         gsap.set(frames, {
           x: 0,
           y: 0,
-          borderRadius: 0,
+          borderRadius: FRAME_RADIUS,
           transformOrigin: '50% 50%',
           clipPath: 'inset(0% 0% 0% 0%)',
         })
@@ -136,7 +143,7 @@ export default function FeaturedProjects() {
                 top: dockTop(),
                 width: dockWidth(),
                 height: dockHeight(),
-                borderRadius: 0,
+                borderRadius: FRAME_RADIUS,
                 x: 0,
               })
             }
@@ -244,7 +251,7 @@ export default function FeaturedProjects() {
                 top: 0,
                 width: stageW,
                 height: stageH,
-                borderRadius: 0,
+                borderRadius: FRAME_RADIUS,
                 x: 0,
                 y: 0,
               },
@@ -253,7 +260,7 @@ export default function FeaturedProjects() {
                 top: dockTop,
                 width: dockWidth,
                 height: dockHeight,
-                borderRadius: 0,
+                borderRadius: FRAME_RADIUS,
                 duration: DOCK_DUR,
               },
               0
@@ -342,15 +349,24 @@ export default function FeaturedProjects() {
             {/* Image layer */}
             {FEATURED.map((p, i) => (
               <div key={p.slug} ref={(el) => setFrame(el, i)} className="fp-frame">
-                <Image
-                  src={p.mockup}
-                  alt={p.name}
-                  fill
-                  priority={i === 0}
-                  loading={i === 0 ? undefined : 'eager'}
-                  className="object-cover object-left-top"
-                  sizes="100vw"
-                />
+                {/* Window chrome sits ABOVE the image. It's a plain child of the
+                    GSAP-animated frame, so the timeline (box/clip tweens on
+                    .fp-frame) is untouched — the whole window docks/reveals as
+                    one, chrome included. */}
+                <BrowserChrome />
+                <div className="fp-screen">
+                  <ImageLightbox src={p.mockup} alt={p.name}>
+                    <Image
+                      src={p.mockup}
+                      alt={p.name}
+                      fill
+                      priority={i === 0}
+                      loading={i === 0 ? undefined : 'eager'}
+                      className="object-cover object-left-top"
+                      sizes="100vw"
+                    />
+                  </ImageLightbox>
+                </div>
               </div>
             ))}
 
@@ -514,6 +530,9 @@ const FP_CSS = `
   width: 100%;
   height: 100%;
   overflow: hidden;
+  /* Pre-JS / SSR corner radius so there's no square-corner flash before GSAP
+     applies its own inline border-radius (FRAME_RADIUS) on mount. */
+  border-radius: 16px;
   /* visibility is OWNED by syncFrames() in JS (deterministic in both scroll
      directions); frame0 is shown synchronously right after the build. The solid
      theme background means any sub-frame raster gap shows the page bg, never a
@@ -523,6 +542,21 @@ const FP_CSS = `
   will-change: transform, opacity;
   box-shadow: 0 50px 130px -36px rgba(0,0,0,0.6);
   z-index: 2;
+}
+/* Window chrome inside the animated frame. It's a normal-flow block pinned to
+   the top of the frame; the screenshot sits in .fp-screen below it. GSAP only
+   tweens the frame's box/clip, so both children ride along untouched. */
+.fp-frame .bf-chrome {
+  position: relative;
+  z-index: 4;
+}
+.fp-screen {
+  position: absolute;
+  top: var(--bf-bar);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
 }
 /* Vertical rule lines on the image's left & right edges — overlaid above the
    photo so they're always visible, and they hug the image as it scales/docks. */

@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform, useInView, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { projects } from '@/lib/data'
+import BrowserFrame from '@/components/ui/BrowserFrame'
+import ImageLightbox from '@/components/ui/ImageLightbox'
 
 /**
  * MASTER project block — Left: product mockup. Right: details (Name, Duration
@@ -34,9 +36,9 @@ export default function ProjectShowcase({
       transition={{ type: 'spring', stiffness: 58, damping: 15, mass: 0.9 }}
       className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center py-14 md:py-20"
     >
-      {/* Left: mockup image */}
-      <div className="relative overflow-hidden rounded-2xl aspect-[4/3] group">
-        <div className="absolute inset-0">
+      {/* Left: mockup inside a floating browser window — click to view full */}
+      <BrowserFrame className="group aspect-[4/3]">
+        <ImageLightbox src={project.mockup} alt={project.name}>
           <Image
             src={project.mockup}
             alt={project.name}
@@ -44,8 +46,8 @@ export default function ProjectShowcase({
             className="object-cover object-left-top transition-transform duration-700 group-hover:scale-[1.03]"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
-        </div>
-      </div>
+        </ImageLightbox>
+      </BrowserFrame>
 
       {/* Right: details (parallax) */}
       <motion.div style={{ y: textY }} className="flex flex-col gap-[1.85rem]">

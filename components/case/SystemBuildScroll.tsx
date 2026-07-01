@@ -271,6 +271,14 @@ function ScreenSection({ screen, index }: { screen: SystemScreen; index: number 
         // bug where a previous screenshot bled under the next section).
         pinSpacing: true,
         invalidateOnRefresh: true,
+        // Scrollbar-drag / keyboard PgUp-PgDn / trackpad flicks can jump the
+        // scroll position several pixels between ticks. Without this, a fast
+        // jump right at the pin boundary can leave this screen's frame still
+        // rendered fixed for one frame while the next screen's pin engages,
+        // producing the flash where two screenshots appear stacked. anticipatePin
+        // makes ScrollTrigger account for that gap so the pin engages/releases
+        // exactly at the boundary regardless of scroll speed or direction.
+        anticipatePin: 1,
       })
       return () => st.kill()
     })
