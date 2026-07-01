@@ -8,8 +8,9 @@ export default function WireframeBento({ images }: { images: string[] }) {
 
   return (
     <>
-      {/* CSS columns — true masonry, zero gaps regardless of image height */}
-      <div style={{ columns: 3, columnGap: '12px' }}>
+      {/* CSS columns — true masonry, zero gaps regardless of image height.
+          Mobile-first: 1 column on phones, 2 on small, 3 on large. */}
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-3">
         {images.map((src, i) => (
           <div
             key={src}
@@ -29,12 +30,6 @@ export default function WireframeBento({ images }: { images: string[] }) {
               loading="lazy"
               className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
             />
-            <span
-              className="absolute top-3 left-3 text-[10px] font-bold font-display uppercase tracking-[0.14em] px-2 py-1 rounded-md pointer-events-none"
-              style={{ background: 'rgba(0,0,0,0.55)', color: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(6px)' }}
-            >
-              {String(i + 1).padStart(2, '0')}
-            </span>
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               style={{ background: 'rgba(0,170,255,0.08)' }}

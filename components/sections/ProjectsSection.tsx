@@ -13,7 +13,7 @@ export default function ProjectsSection() {
   const inView = useInView(ref, { once: true, margin: '-8%' })
 
   return (
-    <section ref={ref} className="py-24 md:py-32">
+    <section ref={ref} className="py-16 md:py-32">
       <div className="container-pad">
         {/* Section header */}
         <motion.div

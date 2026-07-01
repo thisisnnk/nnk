@@ -16,9 +16,9 @@ const BENTO_ITEMS = [
 
 export default function Creatives() {
   return (
-    <section className="relative py-32 section-pad overflow-hidden">
+    <section className="relative py-16 md:py-24 lg:py-32 section-pad overflow-hidden">
       {/* Header */}
-      <div className="max-w-7xl mx-auto mb-16">
+      <div className="max-w-7xl mx-auto mb-10 md:mb-16">
         <motion.p
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -49,7 +49,7 @@ export default function Creatives() {
 
       {/* Bento Grid */}
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-3 md:grid-cols-4 grid-rows-4 gap-4 h-[700px] md:h-[800px]">
+        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[140px] sm:auto-rows-[180px] md:grid-rows-4 gap-3 md:gap-4 md:h-[800px]">
           {BENTO_ITEMS.map((item, i) => (
             <BentoCard key={item.id} item={item} index={i} />
           ))}

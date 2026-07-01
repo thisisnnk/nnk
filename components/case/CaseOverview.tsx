@@ -163,7 +163,7 @@ function OutcomeItem({ item, first }: { item: OverviewOutcomeItem; first: boolea
   const { prefix, num, suffix } = parseSigned(item.n)
   return (
     <StaggerItem
-      className="flex-1 py-2 px-6"
+      className="flex-1 py-2 px-4 sm:px-6"
       style={
         first
           ? undefined
@@ -266,7 +266,7 @@ export default function CaseOverview({
           </p>
           <Stagger
             className="grid"
-            style={{ gridTemplateColumns: `repeat(${scaleItems.length}, 1fr)`, borderTop: '1px solid var(--border)' }}
+            style={{ gridTemplateColumns: `repeat(${scaleItems.length}, minmax(0, 1fr))`, borderTop: '1px solid var(--border)' }}
             delayChildren={0.05}
           >
             {scaleItems.map((item, i) => (
@@ -328,7 +328,7 @@ export default function CaseOverview({
       {/* ── Outcome ────────────────────────────────────── */}
       {outcome && (
         <Reveal
-          className="relative overflow-hidden rounded-2xl px-8 py-4"
+          className="relative overflow-hidden rounded-2xl px-5 py-5 sm:px-8 sm:py-4"
           style={{ background: '#04342C' }}
           y={30}
         >

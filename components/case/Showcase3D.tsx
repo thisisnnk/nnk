@@ -77,21 +77,6 @@ export default function Showcase3D({
       ref={sectionRef}
       className={`relative w-full container-pad py-10 sm:py-14 lg:py-16 ${className ?? ''}`}
     >
-      {/* Soft accent radial glow behind the frame */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-      >
-        <div
-          className="h-[70%] w-[80%] max-w-5xl rounded-full"
-          style={{
-            background:
-              'radial-gradient(60% 60% at 50% 45%, var(--accent-glow) 0%, transparent 70%)',
-            filter: 'blur(40px)',
-          }}
-        />
-      </div>
-
       <div
         className="relative mx-auto w-full max-w-6xl"
         style={{ perspective: 1100 }}
@@ -150,7 +135,7 @@ function FrameChrome({
     background: 'var(--surface)',
     border: '1px solid var(--border-strong)',
     boxShadow:
-      '0 40px 120px -40px rgba(0,0,0,0.55), 0 0 0 1px var(--border), 0 24px 80px -48px var(--accent-glow)',
+      '0 40px 120px -40px rgba(0,0,0,0.55), 0 0 0 1px var(--border)',
   }
 
   if (isPhone) {

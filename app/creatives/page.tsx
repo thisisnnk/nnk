@@ -291,7 +291,7 @@ export default function CreativesPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="fixed top-6 left-1/2 -translate-x-1/2 z-[800]"
+        className="hidden sm:block fixed top-6 left-1/2 -translate-x-1/2 z-[800]"
       >
         <span className="text-[11px] tracking-[0.4em] uppercase text-text/35">
           Playground — Infinite Canvas
@@ -329,7 +329,7 @@ export default function CreativesPage() {
               <div className="relative aspect-video bg-surface">
                 <Image src={activeItem.img} alt={activeItem.title} fill className="object-cover" sizes="90vw" priority />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 px-8 py-6 flex items-end justify-between"
+              <div className="absolute bottom-0 left-0 right-0 px-5 py-5 sm:px-8 sm:py-6 flex items-end justify-between gap-3"
                 style={{ background: 'linear-gradient(to top,rgba(0,0,0,0.9) 0%,transparent 100%)' }}>
                 <div>
                   <p className="text-[10px] font-bold tracking-[0.35em] uppercase text-accent mb-2">

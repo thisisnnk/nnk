@@ -70,7 +70,7 @@ function SubHead({
 }) {
   const reduce = useReducedMotion()
   return (
-    <div id={id} className="container-pad scroll-mt-28 pt-16">
+    <div id={id} className="container-pad scroll-mt-28 pt-10 md:pt-16">
       <RevealText
         className="text-xs font-bold uppercase tracking-[0.2em] mb-3"
         style={{ color: 'var(--accent)' }}
@@ -345,7 +345,7 @@ function FeatureList({ features }: { features: Feature[] }) {
       {features.map((f, i) => (
         <StaggerItem
           key={i}
-          className="p-8 flex items-start gap-6"
+          className="p-6 md:p-8 flex items-start gap-4 md:gap-6"
           style={{ background: 'var(--surface)', borderTop: i > 0 ? '1px solid var(--border)' : undefined }}
           y={16}
         >
@@ -475,7 +475,7 @@ function CaseStudyView({ cs }: { cs: CaseStudy }) {
             </>
           )}
           {cs.qualitative.personas.length > 0 && (
-            <div className="space-y-28 lg:space-y-48">
+            <div className="space-y-16 md:space-y-28 lg:space-y-48">
               {cs.qualitative.personas.map((p) => (
                 <div key={p.name} className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
                   <div className="lg:col-span-2">
@@ -699,8 +699,8 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
       <CaseStudyView cs={cs} />
 
       {/* ── Project navigation ───────────────────────────── */}
-      <div className="container-pad py-16 border-t border-border">
-        <div className="flex items-center justify-between">
+      <div className="container-pad py-12 md:py-16 border-t border-border">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           {prev ? (
             <Link href={`/projects/${prev.slug}`} className="btn-secondary cursor-pointer group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-150" />

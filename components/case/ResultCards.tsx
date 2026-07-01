@@ -104,7 +104,7 @@ function Card({ m }: { m: ResultMetric }) {
             <div className="text-[10px] font-semibold uppercase tracking-[0.08em] mb-1.5" style={{ color: 'var(--text-dim)' }}>
               Before
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '34px', fontWeight: 600, lineHeight: 1, color: 'var(--text-muted)' }}>
+            <div className="break-words" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(22px, 6vw, 34px)', fontWeight: 600, lineHeight: 1, color: 'var(--text-muted)' }}>
               {m.before}
             </div>
           </div>
@@ -115,7 +115,7 @@ function Card({ m }: { m: ResultMetric }) {
             <div className="text-[10px] font-semibold uppercase tracking-[0.08em] mb-1.5" style={{ color: TEAL }}>
               After
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: 700, lineHeight: 0.95, color: TEAL }}>
+            <div className="break-words" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(30px, 8vw, 48px)', fontWeight: 700, lineHeight: 0.95, color: TEAL }}>
               {m.after}
             </div>
           </div>

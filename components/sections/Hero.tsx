@@ -86,8 +86,8 @@ function CtaWithTooltip() {
       onMouseLeave={() => setHovered(false)}
       onMouseMove={handleMouseMove}
     >
-      <a href={gmailCompose('Build Your System')} target="_blank" rel="noopener noreferrer">
-        <ShinyButton>Build Your System</ShinyButton>
+      <a href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer">
+        <ShinyButton>Build My System</ShinyButton>
       </a>
       <AnimatePresence>
         {hovered && (
@@ -140,9 +140,11 @@ export default function Hero() {
 
         <h1 className="mx-auto" style={{ lineHeight: 1.12, fontSize: HERO_SIZE }}>
 
-          {/* Line 1 — single container so stagger runs across all words */}
+          {/* Line 1 — single container so stagger runs across all words.
+              Wraps on narrow phones (no nowrap below md) so the long line
+              can't overflow / force horizontal scroll; stays one line ≥md. */}
           <motion.span
-            className="block whitespace-nowrap"
+            className="block md:whitespace-nowrap"
             variants={staggerContainer(0.5)}
             initial="hidden"
             animate="show"
@@ -167,7 +169,11 @@ export default function Hero() {
             initial="hidden"
             animate="show"
           >
-            <span style={{ display: 'inline-flex', flexWrap: 'nowrap', alignItems: 'center', gap: '0.3em' }}>
+            {/* Box + CHALLENGES: stay one line ≥md (md:flex-nowrap); allow
+                wrapping + centering on narrow phones so the row never forces
+                horizontal scroll. Each child keeps flexShrink:0 so neither
+                the box nor the word is squashed. */}
+            <span className="flex-wrap md:flex-nowrap justify-center" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3em' }}>
 
               {/* Cycling word box — border draws in after all content loads */}
               <motion.span

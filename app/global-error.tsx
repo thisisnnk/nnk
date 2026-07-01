@@ -33,7 +33,7 @@ export default function GlobalError({
         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 700, textTransform: 'uppercase', margin: 0 }}>
           Something Went Wrong
         </h1>
-        <p style={{ color: '#8E8E8E', maxWidth: '32rem', lineHeight: 1.6 }}>
+        <p style={{ color: '#8E8E8E', maxWidth: '32rem', lineHeight: 1.6, overflowWrap: 'anywhere' }}>
           {error?.message || 'A critical error occurred.'}
           {error?.digest ? ` (ref: ${error.digest})` : ''}
         </p>

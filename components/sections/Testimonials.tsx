@@ -32,7 +32,7 @@ const PARAGRAPH = 'Our platform has delivered consistent and measurable improvem
 function TestimonialCard({ t }: { t: typeof testimonials[0] }) {
   return (
     <div
-      className="p-5 flex flex-col gap-4 mb-4 rounded-lg"
+      className="p-4 sm:p-5 flex flex-col gap-4 mb-4 rounded-lg"
       style={{
         border: '1px solid rgba(var(--accent-rgb), 0.4)',
         background: 'var(--surface-2)',
@@ -91,17 +91,19 @@ export default function Testimonials() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-8%' })
 
-  // Split into two columns and triple for a seamless infinite loop
-  // Uneven split so the two columns have different heights and never line up row-to-row
+  // Split into two columns, then DOUBLE each so the loop can reset at an exact
+  // -50% (no repeating-decimal rounding jump = no choppiness at the seam).
+  // Column 1 scrolls up, column 2 scrolls down, for opposing depth.
+  // col2 is padded to 4 cards so it's tall enough to fill the viewport.
   const col1 = [testimonials[0], testimonials[2], testimonials[3], testimonials[5]]
-  const col2 = [testimonials[1], testimonials[4]]
-  const col1Items = [...col1, ...col1, ...col1]
-  const col2Items = [...col2, ...col2, ...col2]
+  const col2 = [testimonials[1], testimonials[4], testimonials[5], testimonials[0]]
+  const col1Items = [...col1, ...col1]
+  const col2Items = [...col2, ...col2]
 
   return (
     <section ref={ref} className="py-24 md:py-36 border-t border-border">
       <div className="container-pad">
-        <div className="grid md:grid-cols-[5fr_7fr] gap-16 md:gap-20 items-center">
+        <div className="grid md:grid-cols-[5fr_7fr] gap-10 md:gap-20 items-center">
 
           {/* ── Left: Vertically centered heading ─────────────────── */}
           <div>
@@ -186,7 +188,7 @@ export default function Testimonials() {
             />
 
             {/* Two scrolling columns */}
-            <div className="grid grid-cols-2 gap-4 h-full">
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-4 h-full">
               {/* Column 1 */}
               <div className="testimonials-col flex flex-col">
                 {col1Items.map((t, i) => (

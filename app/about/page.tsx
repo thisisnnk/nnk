@@ -44,7 +44,7 @@ export default function AboutPage() {
   return (
     <main className="pt-14">
       {/* ── Section 1 · Intro ──────────────────────────────── */}
-      <section className="relative container-pad py-24 md:py-36 border-b border-border overflow-hidden">
+      <section className="relative container-pad py-16 md:py-36 border-b border-border overflow-hidden">
         {/* Ambient background motion */}
         <div
           className="absolute -top-1/4 right-0 w-[50vw] h-[50vw] rounded-full pointer-events-none animate-mesh-a"
@@ -90,7 +90,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Section 2 · Clients ────────────────────────────── */}
-      <section className="py-20 border-b border-border overflow-hidden">
+      <section className="py-16 md:py-20 border-b border-border overflow-hidden">
         <div className="container-pad mb-10">
           <FadeIn>
             <p className="label mb-2">Clients</p>
@@ -119,8 +119,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── Section 3 · What I Do ──────────────────────────── */}
-      <section className="container-pad py-24 md:py-36 border-b border-border">
-        <FadeIn className="mb-16">
+      <section className="container-pad py-16 md:py-36 border-b border-border">
+        <FadeIn className="mb-10 md:mb-16">
           <p className="label mb-3">Capabilities</p>
           <h2 className="display-md">What I Do</h2>
         </FadeIn>
@@ -140,8 +140,8 @@ export default function AboutPage() {
       <AboutApproach />
 
       {/* ── Section 5 · Results ────────────────────────────── */}
-      <section className="container-pad py-24 md:py-36">
-        <FadeIn className="mb-16">
+      <section className="container-pad py-16 md:py-36">
+        <FadeIn className="mb-10 md:mb-16">
           <p className="label mb-3">Impact</p>
           <h2 className="display-md">What This Delivers</h2>
         </FadeIn>

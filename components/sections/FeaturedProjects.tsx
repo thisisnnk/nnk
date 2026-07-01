@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { gsap } from 'gsap'
@@ -8,7 +8,6 @@ import { useGSAP } from '@gsap/react'
 import { ArrowUpRight } from 'lucide-react'
 import { projects } from '@/lib/data'
 import ProjectShowcase from './ProjectShowcase'
-import { TextScramble } from '@/components/ui/TextScramble'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -37,18 +36,51 @@ export default function FeaturedProjects() {
   const progressRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const frameRefs = useRef<HTMLDivElement[]>([])
-  const contentRefs = useRef<HTMLDivElement[]>([])
 
-  // Which case study is currently the most-visible one on the stage. Used to
-  // re-fire the text-scramble reveal each time a project docks into view.
+  // activeIndex = the project the scroll position currently targets (-1 = hidden
+  // before project 0 docks). displayedIndex = the project actually rendered; it
+  // lags activeIndex so the old content can fade OUT before the new fades IN.
   const [activeIndex, setActiveIndex] = useState(-1)
   const activeIndexRef = useRef(-1)
+  const [displayedIndex, setDisplayedIndex] = useState(-1)
+  // Two opacity layers: blockVisible fades the WHOLE block on first appearance /
+  // exit; valuesVisible crossfades ONLY the dynamic values (name / problem /
+  // solution / metrics) on a project→project change — the labels, kicker and
+  // View Details button stay put.
+  const [blockVisible, setBlockVisible] = useState(false)
+  const [valuesVisible, setValuesVisible] = useState(false)
+
+  // FADE_MS must match the opacity transitions in the CSS below.
+  const FADE_MS = 300
+  useEffect(() => {
+    if (activeIndex === displayedIndex) return
+    // Exit → fade the whole block out, then unmount the content.
+    if (activeIndex === -1) {
+      setBlockVisible(false)
+      setValuesVisible(false)
+      const id = setTimeout(() => setDisplayedIndex(-1), FADE_MS)
+      return () => clearTimeout(id)
+    }
+    // First appearance → render and fade the whole block in.
+    if (displayedIndex === -1) {
+      setDisplayedIndex(activeIndex)
+      setValuesVisible(true)
+      setBlockVisible(true)
+      return
+    }
+    // Project → project → block stays; crossfade ONLY the values: fade them out,
+    // swap the copy while invisible, then fade in. The value elements aren't
+    // re-keyed, so they persist and the opacity transition runs both ways.
+    setValuesVisible(false)
+    const id = setTimeout(() => {
+      setDisplayedIndex(activeIndex)
+      setValuesVisible(true)
+    }, FADE_MS)
+    return () => clearTimeout(id)
+  }, [activeIndex, displayedIndex])
 
   const setFrame = (el: HTMLDivElement | null, i: number) => {
     if (el) frameRefs.current[i] = el
-  }
-  const setContent = (el: HTMLDivElement | null, i: number) => {
-    if (el) contentRefs.current[i] = el
   }
 
   useGSAP(
@@ -58,7 +90,6 @@ export default function FeaturedProjects() {
       // Cinematic build only on wide screens where motion is welcome.
       mm.add('(min-width: 1024px) and (prefers-reduced-motion: no-preference)', () => {
         const frames = frameRefs.current
-        const contents = contentRefs.current
         const count = FEATURED.length
 
         // Geometry — re-evaluated on every ScrollTrigger.refresh (resize-safe).
@@ -87,10 +118,6 @@ export default function FeaturedProjects() {
           transformOrigin: '50% 50%',
           clipPath: 'inset(0% 0% 0% 0%)',
         })
-        // Anchor content by its TOP edge (yPercent 0), not its centre, so the
-        // "UX / UI CASE STUDY" kicker lands at the same Y for every project
-        // regardless of body height — no per-project vertical drift.
-        gsap.set(contents, { yPercent: 0, autoAlpha: 0 })
 
         // Dock geometry for the non-first frames lives OUTSIDE the rise tween —
         // applied here and re-applied on every ScrollTrigger refresh. The rise
@@ -144,75 +171,31 @@ export default function FeaturedProjects() {
           }
         }
 
-        // ── Deterministic content opacity from tl.time() ─────────────────
-        // Each block's reveal (0..1) is derived purely from the timeline time,
-        // so it is correct at rest AND in both scroll directions, immune to
-        // refresh / immediateRender. A plain opacity crossfade — no blur.
-        const DOCK_DUR = 1.3              // project 0: full-cover → docked
-        const MORPH = 0.35               // project 0: content sharpen-in window
-        const RISE_DUR = 1.1             // each later image's rise
-        const MORPH_START_COVERAGE = 0.5 // text crossover starts at 50% coverage
-        const easeOut = gsap.parseEase(EASE_OUT)
+        // ── Timeline timing constants ────────────────────────────────────
+        const DOCK_DUR = 1.3 // project 0: full-cover → docked
+        const MORPH = 0.35   // project 0: content sharpen-in hold
+        const RISE_DUR = 1.1 // each later image's rise
 
-        // Eased coverage of rise k at time t → text-morph progress (0..1).
-        const mpAt = (k: number, t: number) => {
-          const lp = Math.min(1, Math.max(0, (t - frameStarts[k]) / RISE_DUR))
-          const coverage = easeOut(lp) // clip wipe 100%→0% eased ⇒ coverage = eased progress
-          return Math.min(
-            1,
-            Math.max(0, (coverage - MORPH_START_COVERAGE) / (1 - MORPH_START_COVERAGE))
-          )
+        // ── Active project → React state ─────────────────────────────────
+        // The content's roll/fade is a one-shot React animation that replays
+        // whenever the block is re-keyed by activeIndex (see JSX). Here we only
+        // resolve WHICH project is active from the scrubbed scroll position:
+        //  -1 until project 0 docks; otherwise the highest project whose image
+        //  has begun rising. Committed to state only on change.
+        const targetAt = (t: number) => {
+          if (t < DOCK_DUR) return -1
+          let k = 0
+          for (let i = 1; i < count; i++) {
+            if (frameStarts[i] !== undefined && t >= frameStarts[i] - 0.0001) k = i
+          }
+          return k
         }
-        // Sequential crossfade: the outgoing block fully clears (mp 0→0.5)
-        // BEFORE the incoming block fades in (mp 0.5→1), so two project
-        // contents are never visible on the same spot at once — no stacked text.
-        const CROSS = 0.5
-        const fadeOut = (mp: number) => 1 - Math.min(1, mp / CROSS)
-        const fadeIn = (mp: number) =>
-          Math.min(1, Math.max(0, (mp - CROSS) / (1 - CROSS)))
-        // How visible block i is at time t: 1 = solid, 0 = faded out.
-        const revealOf = (i: number, t: number) => {
-          // fade-IN: rise i for i≥1; the dock+morph window for i=0.
-          const rin =
-            i === 0
-              ? easeOut(Math.min(1, Math.max(0, (t - DOCK_DUR) / MORPH)))
-              : fadeIn(mpAt(i, t))
-          // fade-OUT: driven by the NEXT image's rise (if any).
-          const rout = i < FEATURED.length - 1 ? fadeOut(mpAt(i + 1, t)) : 1
-          return Math.min(rin, rout)
-        }
-        // Authoritative: set each block's opacity/visibility from time. Called
-        // every tick, on every refresh, and once synchronously at build.
-        // A block is only shown once its reveal clears this threshold — i.e.
-        // once its image has actually docked / wiped in. Below it, NO content is
-        // shown, so nothing overlaps a full-cover or mid-transition image.
-        const SHOW_AT = 0.5
         const syncContents = () => {
           const t = tl.time()
-          // Pick the single most-visible block from the (still-gradual) reveal
-          // curve — that's the crossover point — but DON'T fade.
-          let best = -1
-          let bestReveal = SHOW_AT
-          for (let i = 0; i < contents.length; i++) {
-            const r = Math.max(0, Math.min(1, revealOf(i, t)))
-            if (r > bestReveal) {
-              bestReveal = r
-              best = i
-            }
-          }
-          // best === -1 ⇒ no block has docked yet (or we're mid-transition) ⇒
-          // show nothing. Otherwise snap the active block on, all others off.
-          for (let i = 0; i < contents.length; i++) {
-            const on = i === best
-            contents[i].style.opacity = on ? '1' : '0'
-            contents[i].style.visibility = on ? 'visible' : 'hidden'
-          }
-          // Promote the active block → re-triggers its scramble. Only commit to
-          // React state on an actual change so the per-tick scroll updates don't
-          // thrash re-renders. (-1 = nothing active → no scramble triggered.)
-          if (best !== activeIndexRef.current) {
-            activeIndexRef.current = best
-            setActiveIndex(best)
+          const k = targetAt(t)
+          if (k !== activeIndexRef.current) {
+            activeIndexRef.current = k
+            setActiveIndex(k)
           }
         }
 
@@ -368,102 +351,88 @@ export default function FeaturedProjects() {
                   className="object-cover object-left-top"
                   sizes="100vw"
                 />
-                <span className="fp-frame-index">{String(i + 1).padStart(2, '0')}</span>
               </div>
             ))}
 
-            {/* Content layer — each block's opacity/visibility is driven by the
-                timeline's onUpdate (syncContents) for a deterministic crossfade
-                in both scroll directions. */}
-            {FEATURED.map((p, i) => (
-              <div key={p.slug} ref={(el) => setContent(el, i)} className="fp-content">
-              <span data-reveal className="label">
-                {p.category}
-              </span>
-              <TextScramble
-                as="h3"
-                data-reveal
-                className="display-md fp-title"
-                trigger={activeIndex === i}
-                duration={0.7}
-                speed={0.03}
-              >
-                {p.name}
-              </TextScramble>
-
-              <div data-reveal>
-                <p className="label mb-1.5">Problem</p>
-                <TextScramble
-                  as="p"
-                  className="fp-body"
-                  trigger={activeIndex === i}
-                  duration={1}
-                  speed={0.012}
+            {/* Content layer — ONE persistent block. The static scaffolding
+                (kicker, PROBLEM/SOLUTION/KEY RESULTS labels, View Details) stays
+                put; only the .fp-value elements (name / problem / solution /
+                metrics) crossfade on a project change via the --vis var. The
+                whole block fades only on first appearance / exit (blockVisible).
+                Value elements are NOT re-keyed, so the opacity transition runs
+                both ways for a true crossfade. */}
+            {(() => {
+              const cur = displayedIndex >= 0 ? FEATURED[displayedIndex] : null
+              const itin = cur?.slug === 'ah-itinerary'
+              return (
+                <div
+                  className="fp-content"
+                  style={{
+                    opacity: blockVisible ? 1 : 0,
+                    visibility: cur ? 'visible' : 'hidden',
+                  }}
                 >
-                  {p.problem}
-                </TextScramble>
-              </div>
-
-              <div data-reveal>
-                <p className="label mb-1.5">Solution</p>
-                <TextScramble
-                  as="p"
-                  className="fp-body"
-                  trigger={activeIndex === i}
-                  duration={1}
-                  speed={0.012}
-                >
-                  {p.solution}
-                </TextScramble>
-              </div>
-
-              <div data-reveal>
-                <p className="label mb-2.5">Key Results</p>
-                <div className="flex flex-wrap gap-3">
-                  {p.metrics.map((m, mi) => (
+                  {cur && (
                     <div
-                      key={mi}
-                      className="flex-1 px-5 py-3 rounded-2xl"
-                      style={{
-                        border: '1px solid var(--border-strong)',
-                        flexGrow: p.slug === 'ah-itinerary' && mi === 0 ? 1.7 : undefined,
-                        flexBasis: p.slug === 'ah-itinerary' ? 0 : undefined,
-                        minWidth:
-                          p.slug === 'ah-itinerary' ? (mi === 0 ? '11rem' : '8rem') : '9rem',
-                      }}
+                      className="fp-content-inner"
+                      style={{ '--vis': valuesVisible ? 1 : 0 } as React.CSSProperties}
                     >
-                      <TextScramble
-                        as="p"
-                        className="font-display font-bold text-2xl"
-                        trigger={activeIndex === i}
-                        duration={0.6}
-                        speed={0.025}
-                        style={{
-                          color: 'var(--accent)',
-                          lineHeight: 1,
-                          letterSpacing: '-0.02em',
-                          whiteSpace:
-                            p.slug === 'ah-itinerary' && mi === 0 ? 'nowrap' : undefined,
-                        }}
-                      >
-                        {`${m.value}${m.suffix}`}
-                      </TextScramble>
-                      <p className="label-muted mt-1">{m.label}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                      <span className="label">{cur.category}</span>
+                      <h3 className="display-md fp-title fp-value">{cur.name}</h3>
 
-              <Link
-                data-reveal
-                href={`/projects/${p.slug}`}
-                className="btn-light cursor-pointer w-fit mt-1 group"
-              >
-                View Details
-                <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
-              </Link>
-            </div>
-            ))}
+                      <div>
+                        <p className="label mb-1.5">Problem</p>
+                        <p className="fp-body fp-value">{cur.problem}</p>
+                      </div>
+
+                      <div>
+                        <p className="label mb-1.5">Solution</p>
+                        <p className="fp-body fp-value">{cur.solution}</p>
+                      </div>
+
+                      <div>
+                        <p className="label mb-2.5">Key Results</p>
+                        <div className="flex flex-wrap gap-3 fp-value">
+                          {cur.metrics.map((m, mi) => (
+                            <div
+                              key={mi}
+                              className="flex-1 px-5 py-3 rounded-2xl"
+                              style={{
+                                border: '1px solid var(--border-strong)',
+                                flexGrow: itin && mi === 0 ? 1.7 : undefined,
+                                flexBasis: itin ? 0 : undefined,
+                                minWidth: itin ? (mi === 0 ? '11rem' : '8rem') : '9rem',
+                              }}
+                            >
+                              <p
+                                className="font-display font-bold text-2xl"
+                                style={{
+                                  color: 'var(--accent)',
+                                  lineHeight: 1,
+                                  letterSpacing: '-0.02em',
+                                  whiteSpace: itin && mi === 0 ? 'nowrap' : undefined,
+                                }}
+                              >
+                                {`${m.value}${m.suffix}`}
+                              </p>
+                              <p className="label-muted mt-1">{m.label}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <Link
+                        href={`/projects/${cur.slug}`}
+                        className="btn-light cursor-pointer w-fit mt-1 group"
+                      >
+                        View Details
+                        <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              )
+            })()}
           </div>
         </div>
       </div>
@@ -568,22 +537,6 @@ const FP_CSS = `
 }
 .fp-frame-edge-l { left: 0; }
 .fp-frame-edge-r { right: 0; }
-.fp-frame-glow {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background: linear-gradient(120deg, rgba(0,170,255,0.12) 0%, transparent 55%);
-}
-.fp-frame-index {
-  position: absolute;
-  top: 1.25rem; left: 1.25rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.85);
-  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
-}
-
 .fp-content {
   position: absolute;
   /* Overlay the image's exact vertical band (dockTop 1.5% → dockHeight 90%) and
@@ -602,12 +555,24 @@ const FP_CSS = `
   gap: 1.25rem;
   visibility: hidden;
   will-change: opacity;
-  /* Whole-block fade-in when the active project's content snaps on (after the
-     image docks). syncContents() toggles opacity 0↔1; this eases the rise so
-     the content gently fades in (in tandem with the text-scramble). */
-  transition: opacity 1.2s ease;
+  /* Crossfade between projects (fade out → swap → fade in). Duration MUST match
+     FADE_MS in the component so the swap lands at zero opacity. */
+  transition: opacity 0.3s ease;
   /* Above both the grid and the image layers. */
   z-index: 3;
+}
+/* The inner wrapper carries the flex layout; .fp-content just centres it
+   vertically within the image band. */
+.fp-content-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.85rem;
+}
+/* Only the dynamic values crossfade on a project change (driven by --vis on the
+   inner). The labels / kicker / button stay put. */
+.fp-value {
+  opacity: var(--vis, 1);
+  transition: opacity 0.3s ease;
 }
 .fp-title { font-size: clamp(2rem, 3.4vw, 3.25rem); }
 .fp-body {

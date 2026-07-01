@@ -53,7 +53,7 @@ export default function ShinyButton({
       <motion.button
         style={{ rotateX, rotateY, scale, fontFamily: 'var(--font-display)', background: 'var(--accent)' }}
         className={cn(
-          'h-12 w-max rounded-full border-none px-7 py-2 font-bold uppercase tracking-wide text-black cursor-pointer focus:outline-none',
+          'h-12 w-max max-w-full rounded-full border-none px-7 py-2 font-bold uppercase tracking-wide text-black cursor-pointer focus:outline-none',
           className
         )}
         type='button'

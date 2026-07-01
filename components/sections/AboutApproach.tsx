@@ -108,8 +108,8 @@ export default function AboutApproach() {
   // Reduced-motion / no-pin fallback: a simple horizontal scroll strip.
   if (reduce) {
     return (
-      <section className="py-24 md:py-36 border-b border-border" style={{ background: 'var(--surface)' }}>
-        <div className="container-pad mb-12">
+      <section className="py-16 md:py-36 border-b border-border" style={{ background: 'var(--surface)' }}>
+        <div className="container-pad mb-10 md:mb-12">
           <p className="label mb-3">Philosophy</p>
           <h2 className="display-md">My Approach</h2>
         </div>

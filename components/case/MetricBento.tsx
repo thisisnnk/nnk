@@ -112,7 +112,7 @@ export function StatTile({ item, delay = 0 }: StatTileProps) {
             : undefined
         }
         transition={{ duration: 0.7, ease: EASE, delay }}
-        className="relative h-full overflow-hidden rounded-2xl p-8 text-center md:p-10"
+        className="relative h-full overflow-hidden rounded-2xl p-6 text-center sm:p-8 md:p-10"
         style={{
           background: 'var(--surface)',
           border: hex ? `1px solid ${color}35` : '1px solid var(--border)',

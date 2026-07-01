@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { gmailCompose } from '@/lib/utils'
+import CountryPhoneInput from '@/components/ui/CountryPhoneInput'
+import { DEFAULT_COUNTRY, type Country } from '@/lib/countries'
 
 const NAV: [string, string][] = [
   ['Blogs', '/blog'],
@@ -19,14 +21,18 @@ export default function Footer() {
   // as the last section slides up. Animate its contents in once revealed.
   const [revealed, setRevealed] = useState(false)
   const [name, setName] = useState('')
-  const [whatsapp, setWhatsapp] = useState('+')
+  const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY)
+  const [national, setNational] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error' | 'invalid'>('idle')
+
+  // Full E.164 number — dial code + national digits.
+  const fullNumber = `${country.dial}${national}`
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!name.trim() || status === 'sending') return
-    // Require a country code: leading "+" followed by at least 8 digits.
-    if (!/^\+\d{8,15}$/.test(whatsapp.replace(/[\s-]/g, ''))) {
+    // National number must be a plausible length (country code is always present).
+    if (national.length < 6 || national.length > 14) {
       setStatus('invalid')
       return
     }
@@ -40,14 +46,16 @@ export default function Footer() {
           subject: 'New enquiry from portfolio',
           from_name: 'NNK Portfolio',
           name: name.trim(),
-          'WhatsApp Number': whatsapp.trim(),
+          'WhatsApp Number': fullNumber,
+          Country: country.name,
         }),
       })
       const data = await res.json()
       if (data.success) {
         setStatus('sent')
         setName('')
-        setWhatsapp('+')
+        setNational('')
+        setCountry(DEFAULT_COUNTRY)
       } else {
         setStatus('error')
       }
@@ -142,14 +150,11 @@ export default function Footer() {
               className="w-full rounded-2xl px-4 py-3 text-sm bg-transparent border outline-none transition-colors duration-200 focus:border-accent"
               style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
             />
-            <input
-              type="tel"
-              required
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="WhatsApp (with country code)"
-              className="w-full rounded-2xl px-4 py-3 text-sm bg-transparent border outline-none transition-colors duration-200 focus:border-accent"
-              style={{ borderColor: 'var(--border)', color: 'var(--text)' }}
+            <CountryPhoneInput
+              country={country}
+              national={national}
+              onCountryChange={setCountry}
+              onNationalChange={setNational}
             />
             <button
               type="submit"
@@ -166,7 +171,7 @@ export default function Footer() {
             )}
             {status === 'invalid' && (
               <p className="text-xs" style={{ color: '#ff5470' }}>
-                Add your country code, e.g. +91 98765 43210.
+                Enter a valid phone number, e.g. {country.example}.
               </p>
             )}
             {status === 'error' && (

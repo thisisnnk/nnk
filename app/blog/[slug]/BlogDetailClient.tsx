@@ -87,7 +87,7 @@ export default function BlogDetailClient({ post }: { post: typeof blogPosts[0] }
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-4">
               <span className="label">{post.category}</span>
               <span className="label-muted">{post.date}</span>
               <span className="label-muted">{post.readTime}</span>
@@ -98,7 +98,7 @@ export default function BlogDetailClient({ post }: { post: typeof blogPosts[0] }
       </section>
 
       {/* Article */}
-      <article className="container-pad py-20 max-w-4xl mx-auto">
+      <article className="container-pad py-14 md:py-20 max-w-4xl mx-auto">
         {/* Lead */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -138,7 +138,7 @@ export default function BlogDetailClient({ post }: { post: typeof blogPosts[0] }
       </article>
 
       {/* Related posts */}
-      <section className="container-pad py-20 border-t border-border">
+      <section className="container-pad py-14 md:py-20 border-t border-border">
         <div className="mb-12">
           <p className="label mb-3">More Writing</p>
           <h2 className="display-sm">Related Articles</h2>

@@ -13,10 +13,10 @@ import { projects } from '@/lib/data'
  */
 export default function ProjectShowcase({
   project,
-  index,
 }: {
   project: typeof projects[0]
-  index: number
+  /** Position in the list — accepted by callers; no longer rendered. */
+  index?: number
 }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-12%' })
@@ -45,15 +45,10 @@ export default function ProjectShowcase({
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </div>
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'linear-gradient(120deg, rgba(0,170,255,0.10) 0%, transparent 55%)' }}
-        />
-        <span className="absolute top-5 left-5 label-muted">0{index + 1}</span>
       </div>
 
       {/* Right: details (parallax) */}
-      <motion.div style={{ y: textY }} className="flex flex-col gap-5">
+      <motion.div style={{ y: textY }} className="flex flex-col gap-[1.85rem]">
         <h3 className="display-md">{project.name}</h3>
 
         {/* Duration — highlighted #00AAFF background, white text */}
@@ -70,7 +65,7 @@ export default function ProjectShowcase({
         {/* Problem */}
         <div>
           <p className="label mb-1.5">Problem</p>
-          <p className="text-sm md:text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm md:text-base leading-[1.65]" style={{ color: 'var(--text-muted)' }}>
             {project.problem}
           </p>
         </div>
@@ -78,7 +73,7 @@ export default function ProjectShowcase({
         {/* Solution */}
         <div>
           <p className="label mb-1.5">Solution</p>
-          <p className="text-sm md:text-base leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm md:text-base leading-[1.65]" style={{ color: 'var(--text-muted)' }}>
             {project.solution}
           </p>
         </div>

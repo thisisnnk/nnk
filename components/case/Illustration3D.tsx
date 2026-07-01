@@ -492,7 +492,15 @@ export function Illustration3D({
       height={size}
       role="img"
       aria-label={`${key} illustration`}
-      style={{ display: 'block', overflow: 'visible' }}
+      style={{
+        display: 'block',
+        overflow: 'visible',
+        // Fluid on small screens: never exceed the cell, keep the intended
+        // `size` as the cap on larger screens (desktop look unchanged).
+        width: '100%',
+        height: 'auto',
+        maxWidth: size,
+      }}
     >
       <Defs uid={uid} />
       <Ground uid={uid} />
@@ -502,7 +510,7 @@ export function Illustration3D({
 
   if (!animate) {
     return (
-      <div className={className} style={style}>
+      <div className={className} style={{ maxWidth: '100%', ...style }}>
         {svg}
       </div>
     )
@@ -511,7 +519,7 @@ export function Illustration3D({
   return (
     <motion.div
       className={className}
-      style={style}
+      style={{ maxWidth: '100%', ...style }}
       animate={{ y: [0, -10, 0], rotate: [0, 0.6, 0] }}
       transition={{ duration: 6, ease: 'easeInOut', repeat: Infinity }}
     >

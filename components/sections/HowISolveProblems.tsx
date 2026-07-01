@@ -383,9 +383,9 @@ export default function HowISolveProblems() {
             Every engagement starts with a complete understanding of your workflow — not just your feature request.
           </p>
         </div>
-        <div className="container-pad pb-8 flex gap-4">
+        <div className="container-pad pb-8 flex flex-col sm:flex-row flex-wrap lg:flex-nowrap gap-4">
           {steps.map((s, i) => (
-            <article key={i} className="flex-1 flex flex-col rounded-2xl overflow-hidden border"
+            <article key={i} className="w-full sm:flex-1 sm:min-w-[240px] lg:min-w-0 flex flex-col rounded-2xl overflow-hidden border"
               style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
               <div className="flex items-center justify-center py-6 px-4" style={{ color: 'var(--text-muted)' }}>
                 <div className="w-24 h-24"><StepVisual index={i} animated={false} /></div>
@@ -398,12 +398,12 @@ export default function HowISolveProblems() {
             </article>
           ))}
         </div>
-        <div className="container-pad py-8 flex items-center justify-between gap-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        <div className="container-pad py-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'var(--text-muted)' }}>
             Have a problem worth solving? Let's find the right approach together.
           </p>
-          <a href={gmailCompose('Build Your System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
-            <ShinyButton>Build Your System</ShinyButton>
+          <a href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+            <ShinyButton>Build My System</ShinyButton>
           </a>
         </div>
       </section>
@@ -419,11 +419,9 @@ export default function HowISolveProblems() {
       <style>{SVG_ANIM}</style>
 
       <div className="sticky top-0 h-screen flex flex-col overflow-hidden">
-        <motion.div className="absolute top-0 left-0 h-px w-full origin-left z-10"
-          style={{ background: 'var(--accent)', scaleX: scrollYProgress }} />
-
-        {/* Header */}
-        <div className="container-pad pt-28 pb-0 flex items-end justify-between gap-8 flex-shrink-0">
+        {/* Header — top padding scales with viewport height so short / landscape
+            screens reclaim vertical room (caps at the original 7rem on tall screens). */}
+        <div className="container-pad pt-[clamp(3.5rem,13vh,7rem)] pb-0 flex items-end justify-between gap-8 flex-shrink-0">
           <h2 className="display-md leading-none uppercase" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800 }}>
             How I Solve Problems
           </h2>
@@ -436,12 +434,14 @@ export default function HowISolveProblems() {
               {steps.map((step, i) => (
                 <article key={i}
                   ref={i === steps.length - 1 ? lastCardRef : undefined}
-                  className="flex-none flex flex-col rounded-2xl overflow-hidden border group"
-                  style={{ width: '420px', minWidth: '420px', maxWidth: '420px', background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
-                  <div className="flex items-center justify-center py-6 px-4" style={{ color: 'var(--text-muted)' }}>
-                    <div className="w-56 h-56"><StepVisual index={i} animated={true} /></div>
+                  className="flex-none flex flex-col rounded-2xl overflow-hidden border group h-full max-h-[28rem]"
+                  style={{ width: 'min(420px, 84vw)', minWidth: 'min(420px, 84vw)', maxWidth: '420px', background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }}>
+                  {/* Visual fills the leftover vertical space and shrinks to fit on short
+                      screens (square, capped at 14rem on tall screens = original w-56). */}
+                  <div className="flex-1 min-h-0 flex items-center justify-center py-3 px-4" style={{ color: 'var(--text-muted)' }}>
+                    <div className="h-full aspect-square max-h-56 max-w-full"><StepVisual index={i} animated={true} /></div>
                   </div>
-                  <div className="p-6 border-t flex flex-col gap-3" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+                  <div className="p-6 border-t flex flex-col gap-3 flex-shrink-0" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
                     <span className="label text-accent">0{i + 1}</span>
                     <h3 className="text-2xl font-semibold leading-snug" style={{ fontFamily: 'var(--font-body)' }}>{step.title}</h3>
                     <p className="text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>{step.body}</p>
@@ -452,14 +452,14 @@ export default function HowISolveProblems() {
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="container-pad py-8 flex-shrink-0 flex items-center justify-between gap-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+        {/* CTA — vertical padding scales with viewport height (caps at original 2rem). */}
+        <div className="container-pad py-[clamp(1rem,3.5vh,2rem)] flex-shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'var(--text-muted)' }}>
             Have a problem worth solving? Let's find the right approach together.
           </p>
           {/* ctaRef marks the page right margin — last card's right edge aligns here */}
-          <a ref={ctaRef} href={gmailCompose('Build Your System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
-            <ShinyButton>Build Your System</ShinyButton>
+          <a ref={ctaRef} href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+            <ShinyButton>Build My System</ShinyButton>
           </a>
         </div>
       </div>

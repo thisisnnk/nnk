@@ -590,7 +590,7 @@ export const testimonials = [
 
 export const howISolveProblems = [
   {
-    title: 'Strategy Before Execution',
+    title: 'Research before Design',
     body: 'Many developers build what you ask for. We analyze your workflow first and then build what you actually need.',
   },
   {

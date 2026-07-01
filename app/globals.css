@@ -83,6 +83,7 @@ html {
   background-color: var(--bg);
   color: var(--text);
   overscroll-behavior: none;
+  overflow-x: clip;
   transition: background-color 0.4s ease;
 }
 
@@ -91,7 +92,7 @@ body {
   font-weight: 400;
   background-color: var(--bg);
   color: var(--text);
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.4s ease, color 0.4s ease;
@@ -131,18 +132,25 @@ body {
 ::-webkit-scrollbar { width: 3px; }
 
 /* ─── Testimonials infinite scroll ─────────────────────────── */
+/* Content is doubled in the markup, so a -50% travel lands exactly on the
+   start of the second copy — an integer fraction, no sub-pixel seam jump. */
 @keyframes testimonials-scroll-up {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-33.3333%); }
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+@keyframes testimonials-scroll-down {
+  from { transform: translate3d(0, -50%, 0); }
+  to   { transform: translate3d(0, 0, 0); }
 }
 .testimonials-col {
-  animation: testimonials-scroll-up 33s linear infinite;
+  animation: testimonials-scroll-up 44s linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
 }
 .testimonials-col-offset {
-  animation: testimonials-scroll-up 42s linear infinite;
-  animation-delay: -12s;
+  animation: testimonials-scroll-down 52s linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
 }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
