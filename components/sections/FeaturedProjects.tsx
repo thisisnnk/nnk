@@ -338,9 +338,9 @@ export default function FeaturedProjects() {
           <div className="fp-header">
             <h2
               className="display-md uppercase"
-              style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800 }}
+              style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800, letterSpacing: '0.02em' }}
             >
-              Case Studies
+              Featured Projects
             </h2>
           </div>
 
@@ -458,9 +458,9 @@ export default function FeaturedProjects() {
         <div className="pt-16 pb-6 border-b border-border">
           <h2
             className="display-md uppercase"
-            style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800 }}
+            style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800, letterSpacing: '0.02em' }}
           >
-            Case Studies
+            Featured Projects
           </h2>
         </div>
         <div className="divide-y divide-border">

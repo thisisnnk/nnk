@@ -294,11 +294,11 @@ export interface CaseStudy {
       intro?: string
       sitemap?: SitemapNode[]
       entityChain?: string[]
-      /** AH-CRM only: render the per-role vertical sitemap trees (RoleSitemaps). */
+      /** AH-Lead Management only: render the per-role vertical sitemap trees (RoleSitemaps). */
       roleSitemaps?: boolean
-      /** AH-CRM only: render the interactive 25-page access matrix. */
+      /** AH-Lead Management only: render the interactive 25-page access matrix. */
       accessArchitecture?: boolean
-      /** AH-Itinerary only: render the end-to-end user-flow diagram. */
+      /** AH-Itinerary Builder only: render the end-to-end user-flow diagram. */
       userFlow?: boolean
     }
     systemBuild: {
@@ -319,7 +319,7 @@ export interface CaseStudy {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * AH-CRM
+ * AH-Lead Management
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 const AH_CRM: CaseStudy = {
@@ -545,7 +545,7 @@ const AH_CRM: CaseStudy = {
             { label: 'Payment tracking', value: 3.6 },
             { label: 'Document storage', value: 4.1 },
           ],
-          insight: { metric: '1.4 avg', label: 'centralised tracking — the highest-priority feature', text: 'The top two — centralised tracking and role-based access — are the structural foundation of AH-CRM. Participants independently identified the right architecture before the product existed.' },
+          insight: { metric: '1.4 avg', label: 'centralised tracking — the highest-priority feature', text: 'The top two — centralised tracking and role-based access — are the structural foundation of AH-Lead Management. Participants independently identified the right architecture before the product existed.' },
         },
         {
           n: 'Q10', group: 'Solution direction', type: 'Likert · adoption intent', color: '#0f766e', max: 9,
@@ -631,7 +631,7 @@ const AH_CRM: CaseStudy = {
     },
     systemBuild: {
       what:
-        'AH-CRM is one connected lifecycle behind 8 role-gated front doors. A lead is created (manually or via the Telegram import bridge), worked by sales, quoted and booked by execution, verified by the backend team at a locked conversion gate, executed by a tour guide in the field, and reconciled by accounts — every step writing to a single audit chain. It grew across 26+ schema migrations, each one a real business need discovered through use.',
+        'AH-Lead Management is one connected lifecycle behind 8 role-gated front doors. A lead is created (manually or via the Telegram import bridge), worked by sales, quoted and booked by execution, verified by the backend team at a locked conversion gate, executed by a tour guide in the field, and reconciled by accounts — every step writing to a single audit chain. It grew across 26+ schema migrations, each one a real business need discovered through use.',
       screens: [
         {
           id: 'dashboard',
@@ -1030,7 +1030,7 @@ const AH_CRM: CaseStudy = {
   },
   results: {
     intro:
-      'Measured three months after AH-CRM went live, every operational metric the research had flagged moved decisively in the right direction — lead loss, response time, and cross-team errors fell sharply, while follow-up, visibility, and task completion climbed.',
+      'Measured three months after AH-Lead Management went live, every operational metric the research had flagged moved decisively in the right direction — lead loss, response time, and cross-team errors fell sharply, while follow-up, visibility, and task completion climbed.',
     metrics: [],
     resultCards: [
       { n: '01', category: 'Lead loss rate', desc: 'Percentage of incoming leads that were lost permanently due to zero follow-up action taken by the team', before: '34%', after: '4%', direction: 'down', beforeBar: 100, afterBar: 12, delta: '88%' },

@@ -7,12 +7,13 @@ import ShinyButton from '@/components/ui/ShinyButton'
 import { gmailCompose } from '@/lib/utils'
 
 const PARA_LINES = [
-  'Writing code is easy.',
-  'Understanding business processes, edge cases,',
-  "and automation isn't.",
-  'We engineer systems that solve',
+  'Writing code is easy, but',
+  'understanding business operations,',
+  "functions, and automation isn't.",
+  'I engineer systems that solve',
   'real operational problems —',
-  'not just software.',
+  'not just building software',
+  'that already exists.',
 ]
 
 const TEXT_STYLE: React.CSSProperties = {
