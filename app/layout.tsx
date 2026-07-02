@@ -8,11 +8,11 @@ import CustomCursor from '@/components/ui/CustomCursor'
 
 
 export const metadata: Metadata = {
-  title: 'NNK — Product & Systems Designer',
+  title: 'NNK Portfolio',
   description: 'Helping growing businesses solve operational challenges through system design.',
   keywords: ['product design', 'systems design', 'no-code', 'business operations', 'NNK'],
   openGraph: {
-    title: 'NNK — Product & Systems Designer',
+    title: 'NNK Portfolio',
     description: 'Helping growing businesses solve operational challenges through system design.',
     type: 'website',
   },
