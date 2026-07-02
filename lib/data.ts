@@ -640,3 +640,9 @@ export const aboutMetrics = [
   { value: 100, suffix: '%', label: 'Client Satisfaction' },
   { value: 3, suffix: '×', label: 'Faster Operational Cycles' },
 ]
+
+export const whyNnkStats = [
+  { value: 60, suffix: '+%', label: 'Average Workflow Acceleration' },
+  { value: 40, suffix: '+%', label: 'Reduction in Operational Errors' },
+  { value: 100, suffix: '%', label: 'Projects Fully Digitized & Centralized' },
+]

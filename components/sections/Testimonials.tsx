@@ -101,7 +101,7 @@ export default function Testimonials() {
   const col2Items = [...col2, ...col2]
 
   return (
-    <section ref={ref} className="py-24 md:py-36 border-t border-border">
+    <section ref={ref} className="py-24 md:py-36">
       <div className="container-pad">
         <div className="grid md:grid-cols-[5fr_7fr] gap-10 md:gap-20 items-center">
 

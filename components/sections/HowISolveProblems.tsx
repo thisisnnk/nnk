@@ -375,7 +375,7 @@ export default function HowISolveProblems() {
   /* ── Reduced-motion fallback ───────────────────────────────────────────── */
   if (reduceMotion) {
     return (
-      <section className="border-t border-border" style={{ background: 'var(--surface)' }}>
+      <section style={{ background: 'var(--surface)' }}>
         <style>{SVG_ANIM}</style>
         <div className="container-pad pt-14 pb-8 flex items-end justify-between gap-8">
           <h2 className="display-md leading-none uppercase" style={{ fontFamily: "'Enigma', sans-serif" }}>How I Solve Problems</h2>
@@ -413,7 +413,7 @@ export default function HowISolveProblems() {
   return (
     <section
       ref={sectionRef}
-      className="relative border-t border-border"
+      className="relative"
       style={{ background: 'var(--surface)', height: `calc(100vh + ${dragDistance + REVEAL}px)` }}
     >
       <style>{SVG_ANIM}</style>

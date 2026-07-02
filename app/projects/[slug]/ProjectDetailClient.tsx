@@ -611,8 +611,8 @@ function CaseStudyView({ cs }: { cs: CaseStudy }) {
           )}
         </div>
 
-        {/* Wireframes */}
-        {cs.idea.wireframes && cs.idea.wireframes.length > 0 && (
+        {/* Wireframes (temporarily hidden) */}
+        {false && cs.idea.wireframes && cs.idea.wireframes.length > 0 && (
           <>
             <SubHead
               id="wireframes"
@@ -702,13 +702,13 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
       <div className="container-pad py-12 md:py-16 border-t border-border">
         <div className="flex flex-wrap items-center justify-between gap-4">
           {prev ? (
-            <Link href={`/projects/${prev.slug}`} className="btn-secondary cursor-pointer group">
+            <Link href={`/projects/${prev.slug}`} className="btn-light cursor-pointer group">
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-150" />
               {prev.name}
             </Link>
           ) : <div />}
           {next ? (
-            <Link href={`/projects/${next.slug}`} className="btn-primary cursor-pointer group">
+            <Link href={`/projects/${next.slug}`} className="btn-light cursor-pointer group">
               {next.name}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-150" />
             </Link>

@@ -26,6 +26,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { SystemScreen } from '@/lib/case-studies'
+import ImageLightbox from '@/components/ui/ImageLightbox'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -130,41 +131,45 @@ function ScreenImage({
   }
   if (fitWidth) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
+      <ImageLightbox src={screen.image} alt={screen.title} fill={false}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <motion.img
+          src={screen.image}
+          alt={screen.title}
+          loading="eager"
+          onError={onError}
+          onLoad={(e) => {
+            const el = e.currentTarget
+            if (el.naturalWidth && el.naturalHeight) onMeta(el.naturalWidth / el.naturalHeight)
+          }}
+          className="w-full h-auto block"
+          initial={reduce ? false : { opacity: 0 }}
+          whileInView={reduce ? undefined : { opacity: 1 }}
+          viewport={{ once: true, margin: '-8%' }}
+          transition={{ duration: 1.1, ease: EASE }}
+        />
+      </ImageLightbox>
+    )
+  }
+  return (
+    <ImageLightbox src={screen.image} alt={screen.title}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <motion.img
         src={screen.image}
         alt={screen.title}
-        loading="eager"
+        loading="lazy"
         onError={onError}
         onLoad={(e) => {
           const el = e.currentTarget
           if (el.naturalWidth && el.naturalHeight) onMeta(el.naturalWidth / el.naturalHeight)
         }}
-        className="w-full h-auto block"
+        className="absolute inset-0 w-full h-full object-cover object-top"
         initial={reduce ? false : { opacity: 0 }}
         whileInView={reduce ? undefined : { opacity: 1 }}
         viewport={{ once: true, margin: '-8%' }}
-        transition={{ duration: 1.1, ease: EASE }}
+        transition={{ duration: 0.8, ease: EASE }}
       />
-    )
-  }
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <motion.img
-      src={screen.image}
-      alt={screen.title}
-      loading="lazy"
-      onError={onError}
-      onLoad={(e) => {
-        const el = e.currentTarget
-        if (el.naturalWidth && el.naturalHeight) onMeta(el.naturalWidth / el.naturalHeight)
-      }}
-      className="absolute inset-0 w-full h-full object-cover object-top"
-      initial={reduce ? false : { opacity: 0 }}
-      whileInView={reduce ? undefined : { opacity: 1 }}
-      viewport={{ once: true, margin: '-8%' }}
-      transition={{ duration: 0.8, ease: EASE }}
-    />
+    </ImageLightbox>
   )
 }
 

@@ -180,7 +180,7 @@ export default function BlogDetailClient({ post }: { post: typeof blogPosts[0] }
           ))}
         </div>
         <div className="mt-10">
-          <Link href="/blog" className="btn-secondary cursor-pointer">
+          <Link href="/blog" className="btn-light cursor-pointer">
             View All Articles <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
