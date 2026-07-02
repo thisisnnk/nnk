@@ -612,7 +612,7 @@ function CaseStudyView({ cs }: { cs: CaseStudy }) {
         </div>
 
         {/* Wireframes (temporarily hidden) */}
-        {false && cs.idea.wireframes && cs.idea.wireframes.length > 0 && (
+        {false && (cs.idea.wireframes?.length ?? 0) > 0 && (
           <>
             <SubHead
               id="wireframes"
@@ -620,7 +620,7 @@ function CaseStudyView({ cs }: { cs: CaseStudy }) {
               title="Wireframes"
             />
             <div className="container-pad pt-8 pb-4">
-              <WireframeBento images={cs.idea.wireframes} />
+              <WireframeBento images={cs.idea.wireframes ?? []} />
             </div>
           </>
         )}
