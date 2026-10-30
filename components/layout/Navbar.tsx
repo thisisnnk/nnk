@@ -6,6 +6,7 @@ import { LetterSwapPingPong } from '@/components/ui/LetterSwap'
 
 const LINKS = [
   { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blogs' },
 ]
 
 export default function Navbar() {
@@ -30,6 +31,18 @@ export default function Navbar() {
         paddingRight: 'clamp(1.25rem, 5vw, 5rem)',
       }}
     >
+      {/* Top fade — dark gradient behind the logo + links so content scrolling
+          underneath dissolves smoothly instead of colliding with the nav. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10"
+        style={{
+          height: '7rem',
+          background:
+            'linear-gradient(to bottom, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.25) 70%, rgba(0,0,0,0) 100%)',
+        }}
+      />
+
       {/* Reading progress — pinned to the very top edge, spans full width past the padding */}
       {showProgress && (
         <motion.div

@@ -210,6 +210,11 @@ html.lenis { height: auto; }
   letter-spacing: -0.025em;
   color: var(--text);
 }
+/* Project showcase title — capped on desktop so the details column fits within
+   the mockup's height (same scale as the featured-projects title). */
+@media (min-width: 1400px) {
+  .display-md.ps-title { font-size: clamp(2rem, 3.4vw, 3.25rem); }
+}
 .display-sm {
   font-family: var(--font-display);
   font-size: clamp(1.625rem, 3vw, 2.5rem);
@@ -617,3 +622,26 @@ html.dark .bf-frame {
   .split-word { display: inline-block; overflow: hidden; }
   .split-char { display: inline-block; }
 }
+
+/* ── Blog article body (HTML from the Supabase CMS) ── */
+.blog-prose { color: var(--text-muted); font-size: 1rem; line-height: 1.75; }
+.blog-prose > * + * { margin-top: 1.25rem; }
+.blog-prose h2 { color: var(--text); font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.5rem, 2.6vw, 2rem); line-height: 1.2; margin-top: 3.5rem; margin-bottom: 1.25rem; }
+.blog-prose h3 { color: var(--text); font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.25rem; line-height: 1.3; margin-top: 2.5rem; margin-bottom: 1rem; }
+.blog-prose h4 { color: var(--text); font-weight: 600; margin-top: 2rem; }
+.blog-prose strong { color: var(--text); font-weight: 600; }
+.blog-prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.blog-prose ul { list-style: disc; padding-left: 1.5rem; }
+.blog-prose ol { list-style: decimal; padding-left: 1.5rem; }
+.blog-prose li + li { margin-top: 0.5rem; }
+.blog-prose li::marker { color: var(--accent); }
+.blog-prose blockquote { border-left: 3px solid var(--accent); background: var(--accent-dim); padding: 1.25rem 1.5rem; border-radius: 0 0.75rem 0.75rem 0; color: var(--text); }
+.blog-prose img { width: 100%; height: auto; border-radius: 1rem; margin: 2rem 0; }
+.blog-prose figcaption { font-size: 0.875rem; text-align: center; color: var(--text-dim); margin-top: -1.25rem; }
+.blog-prose hr { border-color: var(--border); margin: 3rem 0; }
+.blog-prose code { font-size: 0.9em; background: var(--surface-2); border: 1px solid var(--border); padding: 0.1rem 0.35rem; border-radius: 0.25rem; }
+.blog-prose pre { overflow-x: auto; background: var(--surface-2); border: 1px solid var(--border); padding: 1rem; border-radius: 0.75rem; }
+.blog-prose pre code { border: 0; padding: 0; }
+.blog-prose table { width: 100%; border-collapse: collapse; display: block; overflow-x: auto; }
+.blog-prose th, .blog-prose td { border: 1px solid var(--border); padding: 0.6rem 0.8rem; text-align: left; }
+.blog-prose th { color: var(--text); }

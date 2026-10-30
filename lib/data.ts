@@ -2,27 +2,26 @@ export const projects = [
   {
     id: 1,
     slug: 'ah-crm',
-    name: 'AH-Lead Management',
+    name: 'Custom CRM',
     tagline: 'Purpose-Built CRM for the Travel Industry',
     duration: 'Research to Deployment',
     year: '2025',
     category: 'System Development',
     image: '/screenshots/ah-crm/dashboard.jpg',
     mockup: '/screenshots/ah-crm/dashboard.jpg',
-    problem: 'There was no single connected system that could take a lead from enquiry to execution with full accountability, role-based access, and a real-time audit trail. Every handoff between teams was a potential point of failure.',
-    solution: 'Designed a role-based internal CRM for Adventure Holidays where 8 distinct user types operate in one unified system — from first enquiry to tour guide handoff — with enforced quality gates and real-time financial visibility.',
+    problem: 'Leads moved from enquiry to execution with no single system — no accountability, no role-based access, no audit trail. Every team handoff was a point of failure.',
+    solution: 'A role-based CRM where 8 user types work in one system — from first enquiry to tour guide handoff — with enforced quality gates and real-time financial visibility.',
     result: 'Conversion disputes dropped from ~35% to near zero. Financial visibility moved from T+14 days to real-time. 100% of leads have a complete audit trail.',
     metrics: [
       { label: 'Lead loss rate',   value: '↓ 88', suffix: '%'    },
       { label: 'Follow-up rate',   value: '+42',  suffix: ' pts' },
-      { label: 'Daily admin time', value: '↓ 73', suffix: '%'    },
     ],
     tags: ['React 18', 'TypeScript', 'Supabase', 'shadcn/ui', 'TanStack Query', 'Figma'],
   },
   {
     id: 2,
     slug: 'ah-itinerary',
-    name: 'AH-Itinerary Builder',
+    name: 'Quotation Maker',
     tagline: 'Itinerary Quotation Builder for the Travel Industry',
     duration: 'Research to Deployment',
     year: '2025',
@@ -30,14 +29,51 @@ export const projects = [
     image: '/screenshots/ah-itinerary/management.png',
     mockup: '/screenshots/ah-itinerary/dashboard.jpg',
     problem: 'Consultants spent 45–60 minutes formatting itinerary documents in Word every time. No reusable content, no version tracking, no consistent branding, and no analytics on quotation volume or performance.',
-    solution: 'A 4-step guided wizard that takes a consultant from blank screen to a branded PDF quotation in under 12 minutes — with a keyword library for 80% content reuse, atomic code generation, and a live analytics dashboard.',
+    solution: 'A 4-step wizard that takes a consultant from blank screen to a branded PDF quotation in under 12 minutes — with 80% content reuse, atomic code generation, and live analytics.',
     result: 'Creation time reduced from 45 min to 12 min (new) or 5 min (duplicate). Code collisions dropped from 15% to 0%. 15–17 hours saved per week across the 4-consultant team.',
     metrics: [
       { label: 'Creation time', value: '45 min', suffix: ' → 12 min' },
       { label: 'Day-plan reuse', value: '0%', suffix: ' → 80%' },
-      { label: 'Code collisions', value: '~15%', suffix: ' → 0%' },
     ],
     tags: ['React 18', 'TypeScript', 'Vite', 'Supabase', 'shadcn/ui', 'Tailwind', 'jsPDF', 'Figma'],
+  },
+  {
+    id: 3,
+    slug: 'ah-website',
+    name: 'Travel Agency Website',
+    tagline: 'A Discovery-to-Enquiry Website for a Travel Agency',
+    duration: 'Design to Launch — 4 months, plus ongoing iteration',
+    year: '2026',
+    category: 'Brand Website',
+    image: '/screenshots/ah-website/hero.jpg',
+    mockup: '/screenshots/ah-website/homepage.jpg',
+    problem: 'A decade-old agency with 25,000+ travelers served had no digital front door — nothing findable on search, browsable on mobile, or reachable without the office number.',
+    solution: 'Designed and built a browsing-first, WhatsApp-native marketing and booking website, paired with a self-service back office so agency staff — not a developer — own packages, pricing, photos, and reviews.',
+    result: 'The website became a live lead channel from a standing start of zero — 4–5 qualified leads and ~15 contact-form completions a month — while package and pricing updates dropped from 2–3 developer-dependent days to ~10 minutes, self-service.',
+    metrics: [
+      { label: 'Website leads',        value: '0',       suffix: ' → 4–5 /mo'   },
+      { label: 'Publish turnaround',   value: '2–3 days', suffix: ' → ~10 min'  },
+    ],
+    tags: ['Web Development', 'SEO & Growth', 'Brand Website'],
+  },
+  {
+    id: 4,
+    slug: 'ah-accounts',
+    name: 'Billing Software',
+    tagline: 'GST-Ready Billing & Ledger for the Travel Industry',
+    duration: 'April 2026 – Present',
+    year: '2026',
+    category: 'System Development',
+    image: '/screenshots/ah-accounts/dashboard.jpg',
+    mockup: '/screenshots/ah-accounts/dashboard.jpg',
+    problem: 'Instalment payments — a deposit, then cash, bank or UPI part-payments — were handled by hand: slow invoicing, inconsistent GST numbering, errors, and no single view of the books.',
+    solution: 'A GST-ready billing and ledger portal, built in three days, that issues sequential, compliant receipts and vouchers and snapshots each customer\'s running balance at issue.',
+    result: 'Shipped core features in 3 days and iterated through live use. An atomic invoice counter eliminated duplicate and skipped invoice numbers. Time-to-invoice, correction-rate, and reconciliation-time targets were defined with the Managing Director up front but are not yet measured against live data — see the case study.',
+    metrics: [
+      { label: 'Kickoff to first release',          value: '3', suffix: ' days' },
+      { label: 'Invoice numbering errors',           value: '0', suffix: '' },
+    ],
+    tags: ['React 18', 'TypeScript', 'Vite', 'Supabase', 'shadcn/ui', 'Tailwind', '@react-pdf/renderer', 'SheetJS', 'Vercel'],
   },
 ]
 
@@ -645,4 +681,47 @@ export const whyNnkStats = [
   { value: 60, suffix: '+%', label: 'Average Workflow Acceleration' },
   { value: 40, suffix: '+%', label: 'Reduction in Operational Errors' },
   { value: 100, suffix: '%', label: 'Projects Fully Digitized & Centralized' },
+]
+
+export const faqs = [
+  {
+    q: 'Who is NNK?',
+    a: "NNK is a systems designer and developer. I design and build custom software for businesses — CRMs, internal tools, quotation builders, websites and automations — shaped around how your team actually works, not around a template.",
+  },
+  {
+    q: 'What problems do you solve?',
+    a: 'Operational ones. Leads buried in WhatsApp chats, data scattered across Excel and Google Drive, manual hand-offs between teams, hours lost formatting the same documents, and owners with no real-time view of what is happening in their business.',
+  },
+  {
+    q: 'How do you solve a problem?',
+    a: "Research first. I talk to every role involved, map the current workflow and find the root bottleneck — not just the symptom. Then I design the system (information architecture, flows, wireframes), build it, deploy it, and keep refining it with your team's feedback.",
+  },
+  {
+    q: 'What exactly do you build?',
+    a: 'Custom CRMs, role-based internal dashboards, quotation and document generators, booking and marketing websites, self-service admin back offices, and automations that connect the tools you already use.',
+  },
+  {
+    q: 'Who is this for?',
+    a: 'Small and mid-size businesses that have outgrown spreadsheets and chat apps — travel agencies, service businesses, consultancies and any operations-heavy team where work passes through several people before it is done.',
+  },
+  {
+    q: 'Why not off-the-shelf software or any developer?',
+    a: 'Off-the-shelf tools force your team into their workflow. Many developers build exactly what you ask for. I analyze your operations first and build what you actually need — one connected system instead of another disconnected tool.',
+  },
+  {
+    q: 'What results can I expect?',
+    a: 'Measurable ones. For a travel business: quotation time dropped from 45 to 12 minutes, lead loss fell by 88%, and package updates went from 2–3 days to about 10 minutes — with every lead carrying a full audit trail.',
+  },
+  {
+    q: 'How long does a project take?',
+    a: 'It depends on scope. A focused tool usually takes a few weeks; a connected multi-role system takes a few months. Work is delivered in phases, so your team starts using parts of the system early. You get a clear timeline after the discovery call.',
+  },
+  {
+    q: 'Will my team be able to manage it without you?',
+    a: "Yes. Every screen is designed around the role using it, and the back office is self-service — your staff update content, pricing and data without a developer. After launch I stay on for support, documentation and continuous improvement.",
+  },
+  {
+    q: 'How do we get started?',
+    a: 'Send a message on WhatsApp or ask your question below. We start with a short conversation about how your business runs today, and you receive a clear proposal: what to build, why, and in what order.',
+  },
 ]

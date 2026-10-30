@@ -4,7 +4,7 @@ import { motion, useReducedMotion, useScroll, useTransform, MotionValue } from '
 import { whyNnkStats } from '@/lib/data'
 import CountUp from '@/components/ui/CountUp'
 import ShinyButton from '@/components/ui/ShinyButton'
-import { gmailCompose } from '@/lib/utils'
+import { useContact, BUILD_MY_SYSTEM } from '@/components/ui/ContactChooser'
 
 const PARA_LINES = [
   'Writing code is easy, but',
@@ -83,14 +83,14 @@ function StatCard({
         y: reduce ? 0 : y,
         scale: reduce ? 1 : scale,
       }}
-      className="p-8 md:p-10 rounded-2xl"
+      className="px-8 py-5 md:px-10 md:py-5 rounded-2xl"
     >
       <CountUp
         value={stat.value}
         suffix={stat.suffix}
         progress={local}
         range={[0, 1]}
-        className="font-display font-bold block mb-3"
+        className="font-display font-bold block mb-2"
         style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1, letterSpacing: '-0.02em', color: 'var(--accent)' }}
       />
       <p className="label-muted" style={{ color: 'var(--text-muted)' }}>{stat.label}</p>
@@ -99,6 +99,7 @@ function StatCard({
 }
 
 export default function WhyNNK() {
+  const contact = useContact()
   const reduce = useReducedMotion()
 
   // sequenceRef is a tall scroll spacer; the visible content pins via `position: sticky`
@@ -136,9 +137,9 @@ export default function WhyNNK() {
   return (
     <section>
       <div ref={sequenceRef} className="relative" style={{ height: '300vh' }}>
-        <div className="sticky top-0 h-screen flex flex-col justify-center container-pad">
+        <div className="sticky top-0 h-screen flex flex-col justify-center container-pad pt-[6vh]">
         {/* ── Logo + heading / reveal paragraph ─────────────────────────── */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 mb-16 md:mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-8 mb-10 md:mb-12">
           <div className="md:col-span-3 flex flex-col gap-4">
             <motion.p
               className="label flex flex-col gap-3 leading-none"
@@ -202,12 +203,10 @@ export default function WhyNNK() {
         </div>
 
         <motion.div
-          className="flex justify-center mt-10 md:mt-14"
+          className="flex justify-center mt-8 md:mt-8"
           style={{ opacity: reduce ? 1 : ctaOpacity, y: reduce ? 0 : ctaY }}
         >
-          <a href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer">
-            <ShinyButton>Build My System</ShinyButton>
-          </a>
+          <ShinyButton onClick={() => contact.open(BUILD_MY_SYSTEM)}>Build My System</ShinyButton>
         </motion.div>
         </div>
       </div>

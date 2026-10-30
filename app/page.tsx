@@ -3,6 +3,7 @@ import FeaturedProjects from '@/components/sections/FeaturedProjects'
 import HowISolveProblems from '@/components/sections/HowISolveProblems'
 import WhyNNK from '@/components/sections/WhyNNK'
 import Testimonials from '@/components/sections/Testimonials'
+import FAQ from '@/components/sections/FAQ'
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <HowISolveProblems />
       <WhyNNK />
       <Testimonials />
+      <FAQ />
     </main>
   )
 }

@@ -8,7 +8,7 @@ export default function ProjectsPage() {
   return (
     <main className="pt-14">
       {/* Page hero */}
-      <section className="relative overflow-hidden container-pad py-14 md:py-20 border-b border-border">
+      <section className="relative overflow-hidden container-pad py-14 md:py-20">
         <DotGrid />
         {/* Bottom fade — blends hero into the page background */}
         <div

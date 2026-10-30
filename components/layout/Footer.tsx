@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { gmailCompose } from '@/lib/utils'
+import { gmailCompose, whatsappLink } from '@/lib/utils'
 import CountryPhoneInput from '@/components/ui/CountryPhoneInput'
+import { useContact } from '@/components/ui/ContactChooser'
 import { DEFAULT_COUNTRY, type Country } from '@/lib/countries'
 
 const NAV: [string, string][] = [
@@ -23,45 +24,61 @@ export default function Footer() {
   const [name, setName] = useState('')
   const [country, setCountry] = useState<Country>(DEFAULT_COUNTRY)
   const [national, setNational] = useState('')
-  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error' | 'invalid'>('idle')
+  const [status, setStatus] = useState<'idle' | 'sent' | 'invalid'>('idle')
+  const contact = useContact()
 
   // Full E.164 number — dial code + national digits.
   const fullNumber = `${country.dial}${national}`
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!name.trim() || status === 'sending') return
+    const who = name.trim()
+    if (!who) return
     // National number must be a plausible length (country code is always present).
     if (national.length < 6 || national.length > 14) {
       setStatus('invalid')
       return
     }
-    setStatus('sending')
-    try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
-          subject: 'New enquiry from portfolio',
-          from_name: 'NNK Portfolio',
-          name: name.trim(),
-          'WhatsApp Number': fullNumber,
-          Country: country.name,
-        }),
-      })
-      const data = await res.json()
-      if (data.success) {
-        setStatus('sent')
-        setName('')
-        setNational('')
-        setCountry(DEFAULT_COUNTRY)
-      } else {
-        setStatus('error')
-      }
-    } catch {
-      setStatus('error')
-    }
+
+    // Still log the lead in the background, so it isn't lost if the visitor
+    // closes the chooser without sending.
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
+        subject: 'New enquiry from portfolio',
+        from_name: 'NNK Portfolio',
+        name: who,
+        'WhatsApp Number': fullNumber,
+        Country: country.name,
+      }),
+    }).catch(() => {})
+
+    contact.open({
+      title: 'Get in touch',
+      whatsapp: `Hi NNK, I'm ${who} (${fullNumber}, ${country.name}). I'd like to discuss building a system for my business. Could we talk?`,
+      subject: `Enquiry from ${who}`,
+      body: [
+        'Hi NNK,',
+        '',
+        "I'd like to discuss building a system for my business.",
+        '',
+        `Name: ${who}`,
+        `WhatsApp: ${fullNumber}`,
+        `Country: ${country.name}`,
+        '',
+        'Could we set up a time to talk?',
+        '',
+        'Thanks,',
+        who,
+      ].join('\n'),
+    })
+
+    setStatus('sent')
+    setName('')
+    setNational('')
+    setCountry(DEFAULT_COUNTRY)
   }
 
   useEffect(() => {
@@ -107,9 +124,7 @@ export default function Footer() {
               Gmail
             </a>
             <a
-              href={`https://wa.me/917339648320?text=${encodeURIComponent(
-                "Hi NNK, I'd like to discuss developing a system. Could we talk?"
-              )}`}
+              href={whatsappLink("Hi NNK, I'd like to discuss developing a system. Could we talk?")}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm cursor-pointer transition-colors duration-200 hover:text-accent"
@@ -158,25 +173,19 @@ export default function Footer() {
             />
             <button
               type="submit"
-              disabled={status === 'sending'}
               className="w-full rounded-2xl px-4 py-3 text-base font-bold uppercase tracking-wide cursor-pointer transition-opacity duration-200 hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{ background: 'var(--accent)', color: 'var(--bg)', fontFamily: 'var(--font-display)' }}
             >
-              {status === 'sending' ? 'Sending…' : 'Submit'}
+              Submit
             </button>
             {status === 'sent' && (
               <p className="text-xs" style={{ color: 'var(--accent)' }}>
-                Thanks — NNK will be in touch shortly.
+                Thanks — send the message and NNK will be in touch shortly.
               </p>
             )}
             {status === 'invalid' && (
               <p className="text-xs" style={{ color: '#ff5470' }}>
                 Enter a valid phone number, e.g. {country.example}.
-              </p>
-            )}
-            {status === 'error' && (
-              <p className="text-xs" style={{ color: '#ff5470' }}>
-                Something went wrong. Please try again.
               </p>
             )}
           </form>

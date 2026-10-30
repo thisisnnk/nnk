@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { howISolveProblems } from '@/lib/data'
 import ShinyButton from '@/components/ui/ShinyButton'
-import { gmailCompose } from '@/lib/utils'
+import { useContact, BUILD_MY_SYSTEM } from '@/components/ui/ContactChooser'
 
 /* ── Keyframes (injected once) ──────────────────────────────────────────── */
 const SVG_ANIM = `
@@ -321,13 +321,14 @@ function StepVisual({ index, animated }: { index: number; animated: boolean }) {
 
 /* ── Main component (sticky horizontal pan until all cards visible) ──────── */
 export default function HowISolveProblems() {
+  const contact = useContact()
   const reduceMotion = useReducedMotion()
   const steps = howISolveProblems
 
   const sectionRef = useRef<HTMLElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const lastCardRef = useRef<HTMLElement>(null)
-  const ctaRef = useRef<HTMLAnchorElement>(null)
+  const ctaRef = useRef<HTMLDivElement>(null)
   // Ref drives the transform every frame; state drives the section height.
   const dragRef = useRef(820)
   const [dragDistance, setDragDistance] = useState(820)
@@ -402,9 +403,9 @@ export default function HowISolveProblems() {
           <p className="text-sm leading-relaxed max-w-xs" style={{ color: 'var(--text-muted)' }}>
             Have a problem worth solving? Let's find the right approach together.
           </p>
-          <a href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
-            <ShinyButton>Build My System</ShinyButton>
-          </a>
+          <div className="flex-shrink-0">
+            <ShinyButton onClick={() => contact.open(BUILD_MY_SYSTEM)}>Build My System</ShinyButton>
+          </div>
         </div>
       </section>
     )
@@ -458,9 +459,9 @@ export default function HowISolveProblems() {
             Have a problem worth solving? Let's find the right approach together.
           </p>
           {/* ctaRef marks the page right margin — last card's right edge aligns here */}
-          <a ref={ctaRef} href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
-            <ShinyButton>Build My System</ShinyButton>
-          </a>
+          <div ref={ctaRef} className="flex-shrink-0">
+            <ShinyButton onClick={() => contact.open(BUILD_MY_SYSTEM)}>Build My System</ShinyButton>
+          </div>
         </div>
       </div>
     </section>

@@ -20,3 +20,16 @@ export function gmailCompose(subject?: string, body?: string) {
   if (body) url += `&body=${encodeURIComponent(body)}`
   return url
 }
+
+/**
+ * NNK's WhatsApp number — international format, digits only (no +, spaces or dashes).
+ * e.g. India +91 81234 56789 → '918123456789'
+ */
+export const WHATSAPP_NUMBER = '917339648320'
+
+/** wa.me deep link — opens WhatsApp (app on mobile, Web on desktop) with the message prefilled. */
+export function whatsappLink(message?: string) {
+  let url = `https://wa.me/${WHATSAPP_NUMBER}`
+  if (message) url += `?text=${encodeURIComponent(message)}`
+  return url
+}

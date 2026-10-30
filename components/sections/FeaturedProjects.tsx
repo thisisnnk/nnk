@@ -13,8 +13,8 @@ import ImageLightbox from '@/components/ui/ImageLightbox'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-// MASTER: landing features 3 of the 5 case studies.
-const FEATURED = projects.slice(0, 3)
+// MASTER: landing features the CRM and Quotation Maker case studies.
+const FEATURED = projects.filter((p) => p.slug === 'ah-crm' || p.slug === 'ah-itinerary')
 
 /* Premium soft easing — long tail, no abrupt stops (Apple-keynote feel). */
 const EASE = 'power3.inOut'
@@ -379,7 +379,6 @@ export default function FeaturedProjects() {
                 both ways for a true crossfade. */}
             {(() => {
               const cur = displayedIndex >= 0 ? FEATURED[displayedIndex] : null
-              const itin = cur?.slug === 'ah-itinerary'
               return (
                 <div
                   className="fp-content"
@@ -408,17 +407,12 @@ export default function FeaturedProjects() {
 
                       <div>
                         <p className="label mb-2.5">Key Results</p>
-                        <div className="flex flex-wrap gap-3 fp-value">
+                        <div className="grid grid-cols-2 gap-3 fp-value">
                           {cur.metrics.map((m, mi) => (
                             <div
                               key={mi}
-                              className="flex-1 px-5 py-3 rounded-2xl"
-                              style={{
-                                border: '1px solid var(--border-strong)',
-                                flexGrow: itin && mi === 0 ? 1.7 : undefined,
-                                flexBasis: itin ? 0 : undefined,
-                                minWidth: itin ? (mi === 0 ? '11rem' : '8rem') : '9rem',
-                              }}
+                              className="min-w-0 px-5 py-3 rounded-2xl"
+                              style={{ border: '1px solid var(--border-strong)' }}
                             >
                               <p
                                 className="font-display font-bold text-2xl"
@@ -426,7 +420,7 @@ export default function FeaturedProjects() {
                                   color: 'var(--accent)',
                                   lineHeight: 1,
                                   letterSpacing: '-0.02em',
-                                  whiteSpace: itin && mi === 0 ? 'nowrap' : undefined,
+                                  whiteSpace: 'nowrap',
                                 }}
                               >
                                 {`${m.value}${m.suffix}`}
@@ -439,7 +433,7 @@ export default function FeaturedProjects() {
 
                       <Link
                         href={`/projects/${cur.slug}`}
-                        className="btn-light cursor-pointer w-fit mt-1 group"
+                        className="btn-light cursor-pointer w-fit group"
                       >
                         View Details
                         <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-150" />
@@ -573,10 +567,9 @@ const FP_CSS = `
 .fp-frame-edge-r { right: 0; }
 .fp-content {
   position: absolute;
-  /* Overlay the image's exact vertical band (dockTop 1.5% → dockHeight 90%) and
-     vertically centre the content within it (justify-content:center), so every
-     project's block is centre-aligned with the image — image centre and content
-     centre both land at ~46.5% of the stage. Paired with yPercent:0 in JS. */
+  /* Overlay the image's exact vertical band (dockTop 1.5% → dockHeight 90%).
+     The inner block stretches to fill it, so the kicker sits on the image's top
+     edge and View Details on its bottom edge. Paired with yPercent:0 in JS. */
   top: 1.5%;
   height: 90%;
   left: 52%;
@@ -585,8 +578,6 @@ const FP_CSS = `
   right: calc(clamp(1.25rem, 5vw, 5rem) + 1rem);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 1.25rem;
   visibility: hidden;
   will-change: opacity;
   /* Crossfade between projects (fade out → swap → fade in). Duration MUST match
@@ -595,25 +586,35 @@ const FP_CSS = `
   /* Above both the grid and the image layers. */
   z-index: 3;
 }
-/* The inner wrapper carries the flex layout; .fp-content just centres it
-   vertically within the image band. */
+/* The inner wrapper fills the image band and spreads its sections between the
+   band's top and bottom edges. The gap is only the minimum spacing; it shrinks
+   on short viewports so the column never grows taller than the image. */
 .fp-content-inner {
   display: flex;
   flex-direction: column;
-  gap: 1.85rem;
+  justify-content: space-between;
+  height: 100%;
+  gap: clamp(0.5rem, 1.5vh, 1.85rem);
 }
+.fp-content-inner > * { margin-top: 0; margin-bottom: 0; }
 /* Only the dynamic values crossfade on a project change (driven by --vis on the
    inner). The labels / kicker / button stay put. */
 .fp-value {
   opacity: var(--vis, 1);
   transition: opacity 0.3s ease;
 }
-.fp-title { font-size: clamp(2rem, 3.4vw, 3.25rem); }
+/* Also capped by viewport height so the column fits the image on short screens. */
+.fp-title { font-size: clamp(2rem, min(3.4vw, 5.5vh), 3.25rem); }
 .fp-body {
   font-size: 0.95rem;
   line-height: 1.65;
   color: var(--text-muted);
   /* Fill the full content column out to the right edge (no narrow cap). */
   max-width: none;
+  /* Safety net — copy is written to fit in 3 lines at desktop width. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 `

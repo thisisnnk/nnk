@@ -3,7 +3,7 @@ import { Fragment, useRef } from 'react'
 import { motion, useInView, type Variants } from 'framer-motion'
 import { testimonials } from '@/lib/data'
 import ShinyButton from '@/components/ui/ShinyButton'
-import { gmailCompose } from '@/lib/utils'
+import { useContact, BUILD_MY_SYSTEM } from '@/components/ui/ContactChooser'
 
 // Word-by-word fade-up
 const wordContainer: Variants = {
@@ -88,6 +88,7 @@ function TestimonialCard({ t }: { t: typeof testimonials[0] }) {
 }
 
 export default function Testimonials() {
+  const contact = useContact()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-8%' })
 
@@ -212,14 +213,7 @@ export default function Testimonials() {
               transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="flex justify-center"
             >
-              <a
-                href={gmailCompose('Build My System')}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Email NNK to build your system"
-              >
-                <ShinyButton>Build My System</ShinyButton>
-              </a>
+              <ShinyButton onClick={() => contact.open(BUILD_MY_SYSTEM)}>Build My System</ShinyButton>
             </motion.div>
           </div>
 

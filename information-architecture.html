@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Information Architecture</title>
+<style>
+  :root{--bg:#f4f5f7;--card:#fff;--ink:#1d2433;--mute:#6b7385;--line:#222}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,Arial,sans-serif}
+  header{padding:28px 32px 8px}
+  h1{margin:0 0 4px;font-size:24px}
+  header p{margin:0;color:var(--mute);font-size:14px}
+  nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 32px;position:sticky;top:0;background:var(--bg);z-index:5}
+  nav a{font-size:13px;padding:6px 12px;border-radius:999px;background:var(--card);color:var(--ink);text-decoration:none;border:1px solid #d9dce3}
+  nav a:hover{background:#e8ebf1}
+  section{background:var(--card);margin:16px 32px 32px;border:1px solid #e1e4ea;border-radius:10px;padding:20px}
+  section h2{margin:0;font-size:18px}
+  section .meta{color:var(--mute);font-size:13px;margin:4px 0 14px}
+  .scroll{overflow-x:auto}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin-top:12px}
+  .legend i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:middle;border-radius:2px}
+  .legend i.dash{background:#fff;border:1.5px dashed #888}
+  svg text{font-family:Inter,system-ui,Arial,sans-serif;pointer-events:none}
+  @media print{nav{display:none}section{break-inside:avoid;margin:0 0 20px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Information Architecture</h1>
+  <p>Hierarchical site maps for the four projects (structure only, not user flows). Derived from <code>lib/case-studies.ts</code>, <code>lib/ahCrmIa.ts</code> and <code>lib/data.ts</code>.</p>
+</header>
+<nav>
+  <a href="#crm">1 · Custom CRM</a>
+  <a href="#itinerary">2 · Quotation Maker</a>
+  <a href="#website">3 · Travel Agency Website</a>
+  <a href="#accounts">4 · Billing Software</a>
+</nav>
+
+<div id="out"></div>
+
+<script>
+const C = {cyan:'#4cc8e8',navy:'#2d3a78',olive:'#a6b04f',purple:'#6a2fbf',orange:'#e09b34',teal:'#1f8481',red:'#de5a52',plum:'#42214f',pink:'#d9124f',gray:'#7a7e82'};
+// node: [label, children?, {dashed}]
+const N=(t,c,o)=>({t,c:c||[],o:o||{}});
+
+const projects = [
+{
+  id:'crm', title:'1 · Custom CRM', root:'Custom CRM',
+  meta:'Role-based internal CRM · 8 roles · 7 modules · 25 pages. A single login routes each role to its own landing page.',
+  cols:[
+    {c:C.cyan, n:N('Auth & Roles',[
+      N('Login',[],{}),
+      N('Admin → /dashboard'),N('Employee → /dashboard'),N('Execution → /quotation'),N('Accounts → /general-ledger'),
+      N('Itinerary → /itineraries'),N('Owner → /owner-dashboard'),N('Tour Guide → /tour-guide/trips'),N('Backend → /verify-trips')
+    ]), bc:C.navy},
+    {c:C.cyan, n:N('Sales & CRM',[
+      N('Dashboard'),N('Leads',[N('Lead Detail',[],{d:1})]),N('Leads Activity'),N('Contacts',[N('Contact Detail',[],{d:1})]),
+      N('All Trips'),N('My Trips'),N('My Tasks'),N('Notifications')
+    ]), bc:C.olive},
+    {c:C.cyan, n:N('Execution',[
+      N('Quotation',[N('Respond to Quotation',[],{d:1})]),N('Execution'),N('Trip Payments')
+    ]), bc:C.purple},
+    {c:C.cyan, n:N('Itinerary',[N('Itineraries',[N('Respond to Itinerary',[],{d:1})])]), bc:C.orange},
+    {c:C.cyan, n:N('Accounts',[N('General Ledger')]), bc:C.teal},
+    {c:C.cyan, n:N('Owner',[N('Owner Dashboard'),N('Employee Performance')]), bc:C.red},
+    {c:C.cyan, n:N('Tour Guide',[N('My Trips',[N('Trip Detail',[],{d:1})])]), bc:C.plum},
+    {c:C.cyan, n:N('Backend Verification',[N('Verify Trips',[N('Verify Trip Detail',[],{d:1})])]), bc:C.pink},
+    {c:C.cyan, n:N('Admin Tools',[N('Console'),N('Tasks')]), bc:C.gray},
+  ],
+  note:'Notifications is available to every role. Owner also sees Leads, Contacts, Quotation, Execution and General Ledger.'
+},
+{
+  id:'itinerary', title:'2 · Quotation Maker', root:'Itinerary Builder',
+  meta:'Quotation & itinerary builder · 6 flat routes, all reachable from the top navigation. Page names derived from the documented screens (the source states the count, not the route names).',
+  cols:[
+    {c:C.cyan, n:N('Dashboard',[
+      N('Date range filter'),N('Summary cards'),N('Charts & breakdowns')
+    ]), bc:C.navy},
+    {c:C.cyan, n:N('Itinerary Management',[
+      N('Itinerary list & filters'),N('Itinerary record (view / edit)'),N('Create New Itinerary'),N('Keywords Management (shortcut)')
+    ]), bc:C.olive},
+    {c:C.cyan, n:N('Studio (4-step wizard)',[
+      N('Pre-step: Region & group type'),N('Step 1 · Summary'),N('Step 2 · Day Plans'),N('Step 3 · Details'),N('Step 4 · Review & PDF')
+    ]), bc:C.purple},
+    {c:C.cyan, n:N('Keyword Templates',[
+      N('Template library'),N('Create template',[N('Keyword (unique ID)',[],{d:1}),N('Day title',[],{d:1}),N('Day notes',[],{d:1}),N('Day activities',[],{d:1})])
+    ]), bc:C.orange},
+  ],
+  note:'Dashed boxes are fields on a screen, not separate pages. “Step 4” is inferred as the final review/PDF output step.'
+},
+{
+  id:'website', title:'3 · Travel Agency Website', root:'Website',
+  meta:'Browsing-first, WhatsApp-native marketing and booking site with a self-service back office.',
+  cols:[
+    {c:C.cyan, n:N('Home',[
+      N('Destination hero carousel'),N('Achievements & client logos'),N('Package discovery grid'),N('Testimonials'),N('Contact form')
+    ]), bc:C.navy},
+    {c:C.cyan, n:N('Packages',[
+      N('International',[N('Continent',[],{d:1}),N('Country',[],{d:1})]),
+      N('Domestic',[N('Region',[],{d:1}),N('State',[],{d:1})]),
+      N('Cruise'),N('Signature Tours')
+    ]), bc:C.olive},
+    {c:C.cyan, n:N('Services',[N('Group tours'),N('Corporate retreats'),N('Custom itineraries'),N('Cruise bookings')]), bc:C.purple},
+    {c:C.cyan, n:N('About',[N('CEO note'),N('Team profiles'),N('Achievement counters')]), bc:C.orange},
+    {c:C.cyan, n:N('Blogs',[N('Destination guides')]), bc:C.teal},
+    {c:C.cyan, n:N('Album',[N('Client & trip photography')]), bc:C.red},
+    {c:C.cyan, n:N('Contact',[N('Contact details'),N('Office map'),N('Enquiry form')]), bc:C.plum},
+    {c:C.cyan, n:N('Back Office (staff)',[N('Package management'),N('Photo & review uploads'),N('Form submission inbox')]), bc:C.pink},
+    {c:C.cyan, n:N('Global elements',[N('WhatsApp CTAs'),N('Google Translate'),N('Scroll to top')]), bc:C.gray},
+  ],
+  note:'Global elements appear on every page.'
+},
+{
+  id:'accounts', title:'4 · Billing Software', root:'Billing Software',
+  meta:'GST-ready billing and ledger · sequential tax receipts and vouchers with an atomic invoice counter.',
+  cols:[
+    {c:C.cyan, n:N('/dashboard',[N('Revenue / expense / net cards'),N('Recent transactions')]), bc:C.navy},
+    {c:C.cyan, n:N('/general-ledger',[
+      N('Revenue tab'),N('Expense tab'),N('Search & date filter'),N('Excel export'),
+      N('/general-ledger/new',[N('Payment entry form',[],{d:1}),N('Proof upload',[],{d:1})])
+    ]), bc:C.olive},
+    {c:C.cyan, n:N('/trip-payments',[
+      N('Bills list & filters'),N('Summary'),N('Payment history'),
+      N('/trip-payments/new',[N('Bill form + live preview',[],{d:1}),N('PDF download',[],{d:1})]),
+      N('/trip-payments/:id/edit')
+    ]), bc:C.purple},
+    {c:C.cyan, n:N('Data model',[
+      N('Itinerary Code'),N('Bill'),N('Bill Items'),N('Ledger Entry'),N('Invoice Counter')
+    ]), bc:C.teal},
+  ],
+  note:'Data model column shows the entity chain, not navigable pages. Dashboard is view-only.'
+}
+];
+
+const BW=172,BH=34,GAP=12,IND=22,CG=34,PAD=24;
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function wrap(t,max=20){ // up to 2 lines
+  if(t.length<=max) return [t];
+  const w=t.split(' ');let a='',i=0;
+  for(;i<w.length;i++){ if((a+' '+w[i]).trim().length>max) break; a=(a+' '+w[i]).trim(); }
+  let b=w.slice(i).join(' ');
+  if(!a){a=t.slice(0,max);b=t.slice(max)}
+  if(b.length>max+4) b=b.slice(0,max+1)+'…';
+  return [a,b];
+}
+function box(x,y,w,h,fill,t,dashed,txt='#fff'){
+  const L=wrap(t, Math.floor(w/6.6));
+  const ty=L.length==1?y+h/2+4:y+h/2-3;
+  return `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" ${dashed?`stroke="rgba(0,0,0,.55)" stroke-dasharray="4 3" stroke-width="1.5"`:''}/>`+
+   `<text x="${x+w/2}" y="${ty}" text-anchor="middle" font-size="12" fill="${txt}">${esc(L[0])}</text>`+
+   (L[1]?`<text x="${x+w/2}" y="${ty+13}" text-anchor="middle" font-size="12" fill="${txt}">${esc(L[1])}</text>`:'');
+}
+function depth(n){return 1+Math.max(0,...n.c.map(depth))}
+function render(p){
+  let x=PAD,svg='',topY=130;
+  const centers=[];let maxY=topY;
+  p.cols.forEach(col=>{
+    const d=depth(col.n); const cw=BW+(d-1)*IND+10;
+    const colW=cw; let y=topY;
+    const cx=x+(colW-(d-1)*IND-10)/2; // L1 box x
+    const l1x=x;
+    svg+=box(l1x,60,BW+ (d>1?0:0),BH+6,col.c,col.n.t,false);
+    centers.push(l1x+BW/2);
+    let cursor=topY;
+    (function walk(n,px,py,depthIx){
+      // n.c children at x=px+IND
+      const kids=n.c; if(!kids.length) return;
+      const kx=px+IND; let lastMid=0;
+      kids.forEach(k=>{
+        const ky=cursor; cursor+=BH+GAP;
+        const dashed=k.o.d||false;
+        const fill=depthIx>=1?col.bc:col.bc;
+        svg+=`<line x1="${px+10}" y1="${py}" x2="${px+10}" y2="${ky+BH/2}" stroke="#222"/>`+
+             `<line x1="${px+10}" y1="${ky+BH/2}" x2="${kx}" y2="${ky+BH/2}" stroke="#222" marker-end="url(#ar)"/>`;
+        svg+=box(kx,ky,BW,BH,fill,k.t,dashed);
+        lastMid=ky;
+        walk(k,kx,ky+BH,depthIx+1);
+      });
+    })(col.n,l1x,60+BH+6,0);
+    maxY=Math.max(maxY,cursor);
+    x+=colW+CG;
+  });
+  const W=Math.max(x,520);
+  const rx=W/2;
+  // root + bus
+  const first=centers[0],last=centers[centers.length-1];
+  let head=`<g transform="translate(${rx-18},6)"><path d="M18 2 L34 16 L30 16 L30 30 L6 30 L6 16 L2 16 Z" fill="#c9ced6"/><rect x="14" y="18" width="8" height="12" fill="#fff"/></g>`+
+    `<text x="${rx+26}" y="26" text-anchor="start" font-size="13" font-weight="600" fill="#1d2433">${esc(p.root)}</text>`;
+  // bus: from root down to y=48? place bus at y=56 above L1 boxes (top 60)
+  let bus=`<line x1="${rx}" y1="40" x2="${rx}" y2="56" stroke="#222"/><line x1="${first}" y1="56" x2="${last}" y2="56" stroke="#222"/>`+
+    centers.map(c=>`<line x1="${c}" y1="56" x2="${c}" y2="60" stroke="#222"/>`).join('');
+  return `<svg viewBox="0 0 ${W} ${maxY+10}" style="width:${W}px;max-width:none;height:auto" xmlns="http://www.w3.org/2000/svg">
+  <defs><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#222"/></marker></defs>
+  ${head}${bus}${svg}</svg>`;
+}
+document.getElementById('out').innerHTML=projects.map(p=>`
+<section id="${p.id}">
+  <h2>${p.title}</h2>
+  <div class="meta">${p.meta}</div>
+  <div class="scroll">${render(p)}</div>
+  <div class="legend"><span><i style="background:${C.cyan}"></i>Top-level section / module</span><span><i style="background:#555"></i>Page / sub-page (colour = branch)</span><span><i class="dash"></i>Detail view / field / entity</span><span>${p.note}</span></div>
+</section>`).join('');
+</script>
+</body>
+</html>

@@ -22,7 +22,8 @@ import { BentoGrid, BentoCard } from '@/components/case/Bento'
 import { Illustration3D } from '@/components/case/Illustration3D'
 import AccessArchitecture from '@/components/case/AccessArchitecture'
 import AppSitemap from '@/components/case/AppSitemap'
-import ItineraryUserFlow from '@/components/case/ItineraryUserFlow'
+import IATree from '@/components/case/IATree'
+import { iaTrees } from '@/lib/iaTrees'
 import GoogleFormMock from '@/components/case/GoogleFormMock'
 import EmpathyMap from '@/components/case/EmpathyMap'
 import QuantReport from '@/components/case/QuantReport'
@@ -394,11 +395,11 @@ function BulletList({ items }: { items: string[] }) {
 //   01 Overview · 02 Research · 03 Idea · 04 Results
 // ─────────────────────────────────────────────────────────
 
-function CaseStudyView({ cs }: { cs: CaseStudy }) {
+function CaseStudyView({ cs, slug }: { cs: CaseStudy; slug: string }) {
   return (
     <>
       {/* 01 — Project Overview */}
-      <SectionShell id="overview" number="01" title="Project Overview" subtitle="Adventure Holidays — Coimbatore, Tamil Nadu" compact>
+      <SectionShell id="overview" number="01" title="Project Overview" subtitle="Travel Agency — Coimbatore, Tamil Nadu" compact>
         <div className="container-pad pb-20">
           {cs.overview.projectHero ? (
             <CaseOverview
@@ -565,6 +566,15 @@ function CaseStudyView({ cs }: { cs: CaseStudy }) {
           desc={cs.idea.ia.intro}
         />
         <div className="container-pad pt-10 pb-4">
+          {iaTrees[slug] && (
+            <div className="mb-14">
+              <RevealText className="text-xs font-bold uppercase tracking-[0.2em] mb-5" style={{ color: 'var(--accent)' }} y={12}>
+                Information Architecture Diagram
+              </RevealText>
+              <IATree tree={iaTrees[slug]} />
+            </div>
+          )}
+
           {cs.idea.ia.roleSitemaps ? (
             <div className="mb-14">
               <AppSitemap />
@@ -578,15 +588,6 @@ function CaseStudyView({ cs }: { cs: CaseStudy }) {
                 <Sitemap nodes={cs.idea.ia.sitemap} />
               </div>
             )
-          )}
-
-          {cs.idea.ia.userFlow && (
-            <div className="mb-14">
-              <RevealText className="text-xs font-bold uppercase tracking-[0.2em] mb-5" style={{ color: 'var(--accent)' }} y={12}>
-                User Flow
-              </RevealText>
-              <ItineraryUserFlow />
-            </div>
           )}
 
           {cs.idea.ia.accessArchitecture && (
@@ -696,7 +697,7 @@ export default function ProjectDetailClient({ project }: { project: Project }) {
       <CaseHero project={project} />
 
       {/* ── Case study body — unified 4-phase structure ──── */}
-      <CaseStudyView cs={cs} />
+      <CaseStudyView cs={cs} slug={project.slug} />
 
       {/* ── Project navigation ───────────────────────────── */}
       <div className="container-pad py-12 md:py-16 border-t border-border">

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion'
 import DotGrid from '@/components/ui/DotGrid'
 import ShinyButton from '@/components/ui/ShinyButton'
-import { gmailCompose } from '@/lib/utils'
+import { useContact, BUILD_MY_SYSTEM } from '@/components/ui/ContactChooser'
 
 const HERO_SIZE = 'clamp(1.25rem, 4.8vw, 5.25rem)'
 const EXIT_DUR  = 0.14
@@ -63,6 +63,7 @@ function CursorIcon() {
 }
 
 function CtaWithTooltip() {
+  const contact = useContact()
   const [hovered, setHovered] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
@@ -86,9 +87,7 @@ function CtaWithTooltip() {
       onMouseLeave={() => setHovered(false)}
       onMouseMove={handleMouseMove}
     >
-      <a href={gmailCompose('Build My System')} target="_blank" rel="noopener noreferrer">
-        <ShinyButton>Build My System</ShinyButton>
-      </a>
+      <ShinyButton onClick={() => contact.open(BUILD_MY_SYSTEM)}>Build My System</ShinyButton>
       <AnimatePresence>
         {hovered && (
           <motion.div

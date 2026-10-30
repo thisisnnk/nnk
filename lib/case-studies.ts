@@ -298,8 +298,6 @@ export interface CaseStudy {
       roleSitemaps?: boolean
       /** AH-Lead Management only: render the interactive 25-page access matrix. */
       accessArchitecture?: boolean
-      /** AH-Itinerary Builder only: render the end-to-end user-flow diagram. */
-      userFlow?: boolean
     }
     systemBuild: {
       what: string
@@ -328,7 +326,7 @@ const AH_CRM: CaseStudy = {
     glance: [],
     stats: [],
     projectHero: {
-      tagline: 'A role-based internal CRM built specifically for Adventure Holidays to manage the full lifecycle of a lead — from first enquiry to completed trip.',
+      tagline: 'A role-based internal CRM built specifically for a travel agency to manage the full lifecycle of a lead — from first enquiry to completed trip.',
       problem: 'An 8-role operation spanning sales, itinerary, execution, accounts, tour guides, and backend verification — run entirely through WhatsApp and Excel, with no shared system, no accountability trail, and no visibility across teams.',
     },
     metaCards: [
@@ -348,7 +346,7 @@ const AH_CRM: CaseStudy = {
   },
   qualitative: {
     intro:
-      'I started with people, not features. Across the 8 roles at Adventure Holidays I ran in-depth interviews and shadow sessions to map how a travel enquiry actually moves through the business — every handoff, every workaround, every breakdown. Four primary personas represent the most frequent and complex usage patterns.',
+      'I started with people, not features. Across the 8 roles at the agency I ran in-depth interviews and shadow sessions to map how a travel enquiry actually moves through the business — every handoff, every workaround, every breakdown. Four primary personas represent the most frequent and complex usage patterns.',
     personas: [
       {
         name: 'Ravi M.', role: 'Sales Employee', age: 28, color: '#1d4ed8', badge: 'Primary',
@@ -397,7 +395,7 @@ const AH_CRM: CaseStudy = {
           does: ['Waits for a manual report every Friday', 'Asks the team to compile data before any decision', 'Judges performance on impression rather than metrics'],
           feels: ['Blind to her own business in real time', 'Impatient with stale, second-hand reporting', 'Concerned margins are slipping unseen'],
         },
-        bio: 'Founded Adventure Holidays 15 years ago. Oversees a team of 12+, handles strategic decisions, and needs a finger on the pulse of the business — without waiting for someone to compile a report.',
+        bio: 'Founded the agency 15 years ago. Oversees a team of 12+, handles strategic decisions, and needs a finger on the pulse of the business — without waiting for someone to compile a report.',
         goals: ['See business KPIs in real time — leads, conversions, revenue, margins', 'Drill down into individual employee performance', "Know which lead sources are working and which aren't", 'Have a financial overview without waiting for the accounts team'],
         frustrations: ['Gets a manual report every Friday — already stale by the time she reads it', "Can't see conversion rate or lead-source ROI without asking someone to compile data", 'Has no visibility into trip margins until weeks after completion', 'Employee performance is assessed on gut feeling rather than data'],
         quote: '"I built this business over 15 years. But I can\'t tell you today what my conversion rate is, or which employee closed the most this month, without asking someone to run the numbers."',
@@ -406,7 +404,7 @@ const AH_CRM: CaseStudy = {
   },
   quantitative: {
     intro:
-      'To pressure-test the interview themes with numbers, I ran a pre-development survey across all eight roles at Adventure Holidays (n = 14). Ten questions mapped the current tooling, where the workflow broke, what it was costing in time and confidence, and which capabilities the team itself ranked as critical.',
+      'To pressure-test the interview themes with numbers, I ran a pre-development survey across all eight roles at the agency (n = 14). Ten questions mapped the current tooling, where the workflow broke, what it was costing in time and confidence, and which capabilities the team itself ranked as critical.',
     report: {
       subtitle: 'Pre-development survey · Q1 2026 · n = 14 participants',
       meta: [
@@ -463,7 +461,7 @@ const AH_CRM: CaseStudy = {
             { label: '1 week or more', value: 2 },
             { label: 'No standard process', value: 2 },
           ],
-          insight: { metric: '57%', label: 'take three or more days to send a quotation', text: 'The travel-industry benchmark is 24–48 hours. At 3–5 days, AH was ceding leads to faster-moving competitors. 14% had no standard process at all — every quotation reinvented from scratch.' },
+          insight: { metric: '57%', label: 'take three or more days to send a quotation', text: 'The travel-industry benchmark is 24–48 hours. At 3–5 days, the agency was ceding leads to faster-moving competitors. 14% had no standard process at all — every quotation reinvented from scratch.' },
         },
         {
           n: 'Q4', group: 'Failure points', type: 'Likert · frequency', color: '#dc2626', max: 8,
@@ -517,7 +515,7 @@ const AH_CRM: CaseStudy = {
             { label: '2–4 hours', value: 6 },
             { label: '4+ hours', value: 2 },
           ],
-          insight: { metric: '57%', label: 'spend 2+ hours daily on admin tasks', text: 'At 2–4 hours of admin per person per day, AH was effectively funding a second team that produced zero revenue. Structured workflows for follow-ups, quotations, and handoffs recover this time directly.' },
+          insight: { metric: '57%', label: 'spend 2+ hours daily on admin tasks', text: 'At 2–4 hours of admin per person per day, the agency was effectively funding a second team that produced zero revenue. Structured workflows for follow-ups, quotations, and handoffs recover this time directly.' },
         },
         {
           n: 'Q8', group: 'Cost of inaction', type: 'Likert · confidence', color: '#1d4ed8', max: 7,
@@ -545,7 +543,7 @@ const AH_CRM: CaseStudy = {
             { label: 'Payment tracking', value: 3.6 },
             { label: 'Document storage', value: 4.1 },
           ],
-          insight: { metric: '1.4 avg', label: 'centralised tracking — the highest-priority feature', text: 'The top two — centralised tracking and role-based access — are the structural foundation of AH-Lead Management. Participants independently identified the right architecture before the product existed.' },
+          insight: { metric: '1.4 avg', label: 'centralised tracking — the highest-priority feature', text: 'The top two — centralised tracking and role-based access — are the structural foundation of the CRM. Participants independently identified the right architecture before the product existed.' },
         },
         {
           n: 'Q10', group: 'Solution direction', type: 'Likert · adoption intent', color: '#0f766e', max: 9,
@@ -565,7 +563,7 @@ const AH_CRM: CaseStudy = {
     surveys: [
       {
         title: 'Internal Operations & Workflow Survey',
-        description: 'Circulated to all 8 roles at Adventure Holidays to baseline how work moves between teams today.',
+        description: 'Circulated to all 8 roles at the agency to baseline how work moves between teams today.',
         responses: '23 responses',
         questions: [
           { q: 'How do you currently track the status of a lead?', type: 'choice', options: ['WhatsApp messages', 'Excel sheet', 'Memory / verbal', 'A dedicated tool'], answer: 0, required: true },
@@ -631,7 +629,7 @@ const AH_CRM: CaseStudy = {
     },
     systemBuild: {
       what:
-        'AH-Lead Management is one connected lifecycle behind 8 role-gated front doors. A lead is created (manually or via the Telegram import bridge), worked by sales, quoted and booked by execution, verified by the backend team at a locked conversion gate, executed by a tour guide in the field, and reconciled by accounts — every step writing to a single audit chain. It grew across 26+ schema migrations, each one a real business need discovered through use.',
+        'The CRM is one connected lifecycle behind 8 role-gated front doors. A lead is created (manually or via the Telegram import bridge), worked by sales, quoted and booked by execution, verified by the backend team at a locked conversion gate, executed by a tour guide in the field, and reconciled by accounts — every step writing to a single audit chain. It grew across 26+ schema migrations, each one a real business need discovered through use.',
       screens: [
         {
           id: 'dashboard',
@@ -1030,7 +1028,7 @@ const AH_CRM: CaseStudy = {
   },
   results: {
     intro:
-      'Measured three months after AH-Lead Management went live, every operational metric the research had flagged moved decisively in the right direction — lead loss, response time, and cross-team errors fell sharply, while follow-up, visibility, and task completion climbed.',
+      'Measured three months after the CRM went live, every operational metric the research had flagged moved decisively in the right direction — lead loss, response time, and cross-team errors fell sharply, while follow-up, visibility, and task completion climbed.',
     metrics: [],
     resultCards: [
       { n: '01', category: 'Lead loss rate', desc: 'Percentage of incoming leads that were lost permanently due to zero follow-up action taken by the team', before: '34%', after: '4%', direction: 'down', beforeBar: 100, afterBar: 12, delta: '88%' },
@@ -1055,7 +1053,7 @@ const AH_ITINERARY: CaseStudy = {
     glance: [],
     stats: [],
     projectHero: {
-      tagline: 'A guided itinerary-quotation builder for Adventure Holidays — a 4-step wizard that takes a travel consultant from a blank screen to a professional, branded PDF in under 12 minutes.',
+      tagline: 'A guided itinerary-quotation builder for a travel agency — a 4-step wizard that takes a travel consultant from a blank screen to a professional, branded PDF in under 12 minutes.',
       problem: 'A 4-consultant studio producing 5–8 itineraries each every week — every quotation hand-formatted from scratch in Word, with no reusable content, no consistent branding, no version tracking, and no visibility into how many quotations were going out the door.',
     },
     metaCards: [
@@ -1113,7 +1111,7 @@ const AH_ITINERARY: CaseStudy = {
           does: ['Relies on intuition for volume and trends', 'Asks the team for numbers nobody tracks', 'Reviews the board with anecdotes, not exports'],
           feels: ['Frustrated flying blind on her own business', 'Uncertain which group types to invest in', 'Skeptical of ROI on tools she can\'t measure'],
         },
-        bio: 'Founded Adventure Holidays 15 years ago. Wants to understand the business at a glance — popular regions, productive consultants, volume trends month over month. Currently has none of this data.',
+        bio: 'Founded the agency 15 years ago. Wants to understand the business at a glance — popular regions, productive consultants, volume trends month over month. Currently has none of this data.',
         goals: ['Dashboard KPIs: total itineraries, region breakdown, consultant performance', 'Filter data by date range, region, and group type', 'Export data to Excel for board reviews', 'Know if team output is growing or declining'],
         frustrations: ['Has zero data on itinerary volume — relies on gut feeling', "Can't compare domestic vs international quotation trends", 'No way to identify which group types are growing', "Pays for tools but can't measure if the team is using them"],
         quote: '"I run a business with 12 people and I can\'t tell you how many quotations we sent last month."',
@@ -1266,7 +1264,7 @@ const AH_ITINERARY: CaseStudy = {
             { label: 'Structured pricing section', value: 64 },
             { label: 'Duplicate & adapt a past itinerary', value: 57 },
           ],
-          insight: { metric: '93%', label: 'ranked automatic PDF generation as most valuable', text: 'PDF export (93%), pre-built day-plan templates (86%), and consistent branded formatting (79%) are the top three asks — and the three core features of AH Itinerary Studio.' },
+          insight: { metric: '93%', label: 'ranked automatic PDF generation as most valuable', text: 'PDF export (93%), pre-built day-plan templates (86%), and consistent branded formatting (79%) are the top three asks — and the three core features of the Quotation Maker.' },
         },
       ],
     },
@@ -1321,7 +1319,6 @@ const AH_ITINERARY: CaseStudy = {
     ia: {
       intro:
         'The application has 6 flat routes — no nested hierarchies, every page reachable from the top navigation. Behind them sits a deliberately flat data model: complex nested data (day plans, pricing, notes) is stored as JSONB, so there are no joins for what is essentially document data.',
-      userFlow: true,
     },
     systemBuild: {
       what:
@@ -1781,12 +1778,699 @@ const AH_ITINERARY: CaseStudy = {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+ * AH-WEBSITE
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+const AH_WEBSITE: CaseStudy = {
+  overview: {
+    facts: [],
+    glance: [],
+    stats: [],
+    projectHero: {
+      tagline: 'A browsing-first, WhatsApp-native marketing and booking website for a travel agency — paired with a self-service back office so the agency\'s own staff, not a developer, own packages, pricing, photos, and reviews.',
+      problem: 'A decade-old travel agency with a strong offline reputation — 25,000+ travelers served, corporate clients including leading IT companies and top academic institutions — had no real digital front door. Beyond an Instagram page, the business had no website at all: nothing to be found on search, nothing to browse on mobile, and no way for a prospective customer to start an enquiry without already knowing the office phone number.',
+    },
+    metaCards: [
+      { icon: 'Briefcase', label: 'Role', value: 'Full-Stack Web Design & Development', sub: 'IA · UI · frontend build · admin back office · SEO' },
+      { icon: 'Users', label: 'Team', value: 'Solo', sub: 'Working directly with agency leadership' },
+      { icon: 'Clock', label: 'Timeline', value: 'Design to Launch — 4 months', sub: 'Plus ongoing iteration' },
+      { icon: 'Monitor', label: 'Platform', value: 'Web Application', sub: 'Responsive + self-service admin back office' },
+    ],
+    outcome: {
+      period: 'Measured post-launch',
+      items: [
+        { n: 'New channel', label: 'Website-sourced leads',    sub: '0 → 4–5 / month'     },
+        { n: 'New channel', label: 'Contact form completions', sub: '0 → ~15 / month'     },
+        { n: '↓ ~99.7%',    label: 'Package/price publish time', sub: '2–3 days → ~10 min' },
+      ],
+    },
+  },
+  qualitative: {
+    intro:
+      'With no prior website and therefore no existing analytics, research started with the people who actually generate and receive enquiries: agency staff, interviewed about the calls and WhatsApp messages they field every day. Three primary personas represent the most common visit intents a new website would need to serve.',
+    personas: [
+      {
+        name: 'Ramesh K.', role: 'Corporate HR Coordinator', age: 36, color: '#1d4ed8', badge: 'Primary',
+        empathy: {
+          says: ['"Do you have experience with 200+ person groups?"', '"Just send me a quote on WhatsApp."', '"Who else have you worked with?"'],
+          thinks: ['"If this looks like a two-person operation, I\'m out."', '"I don\'t have time to call five agencies before dinner."', '"Corporate clients on the wall means less risk for me."'],
+          does: ['Opens 3–4 agency tabs at once and scans for logos and scale', 'Skips contact forms in favour of a direct WhatsApp message', 'Closes the tab within seconds if there\'s no visible proof of capacity'],
+          feels: ['Impatient — evaluating on a strict clock', 'Skeptical by default until proof appears', 'Relieved when credibility signals show up early'],
+        },
+        bio: 'Books annual offsites and team outings for a 200+ person company. Compares 3–4 vendors before shortlisting, usually outside office hours.',
+        goals: ['Quickly gauge credibility — past corporate clients, group-size capacity', 'Get a WhatsApp quote without filling a long form', 'See proof of scale — fleet size, group-handling experience'],
+        frustrations: ['No client logos or case-proof anywhere online', 'No way to specify group size or dates before contacting the agency', 'Had to call during business hours just to get basic information'],
+        quote: '"I need to shortlist five agencies in one evening. If I can\'t find proof you\'ve handled a 200-person group before, I move to the next tab."',
+      },
+      {
+        name: 'Divya & Arjun', role: 'Newlywed Couple', age: 28, color: '#7c3aed', badge: 'Primary',
+        empathy: {
+          says: ['"Let\'s just scroll through a few options first."', '"Are these real photos or stock images?"', '"I don\'t want to call anyone yet."'],
+          thinks: ['"If I have to call to see anything, I\'ll just look elsewhere."', '"This should feel like window shopping, not paperwork."', '"We\'ll message when we\'re actually ready."'],
+          does: ['Browses late evening on mobile, alongside other agencies\' Instagram pages', 'Scrolls for inspiration before narrowing to a shortlist', 'Waits to initiate contact until they\'ve already half-decided'],
+          feels: ['Excited but easily distracted — one bad first impression loses them', 'Reluctant to commit to a phone call this early', 'Reassured by real trip photography over polished stock imagery'],
+        },
+        bio: 'Planning an international honeymoon. Browse primarily on mobile, late evening, comparing destinations before committing to one agency.',
+        goals: ['Browse destinations visually before deciding', 'Filter by budget or region without calling anyone', 'See real trip photos, not stock images'],
+        frustrations: ['No way to browse online at all — information only available by asking directly', 'No visual proof of past trips', 'Unclear how to take the first step toward booking'],
+        quote: '"We don\'t want to call five agencies just to compare options. We want to scroll, get inspired, and message when we\'re ready."',
+      },
+      {
+        name: 'Suresh P.', role: 'Retired Bank Manager', age: 58, color: '#0f766e', badge: 'Primary',
+        empathy: {
+          says: ['"Is this a real, established agency?"', '"Show me packages for our state."', '"Just give me a number to call."'],
+          thinks: ['"My son found this on Instagram — but is it trustworthy?"', '"I don\'t want to hunt through menus to find what I need."', '"I\'d rather talk to a person than fill in a form."'],
+          does: ['Asks a younger family member to look the agency up online first', 'Looks for years-in-business and traveler counts before anything else', 'Defaults to calling the moment browsing gets confusing'],
+          feels: ['Cautious about unfamiliar businesses found on social media', 'Frustrated by any friction that isn\'t a straightforward phone call', 'Reassured by plain, visible proof of scale and history'],
+        },
+        bio: 'Books domestic group pilgrimage and leisure tours for extended family. Prefers phone or WhatsApp over forms; low tolerance for slow or confusing experiences.',
+        goals: ['Find domestic packages by region or state easily', 'Confirm the agency is established and trustworthy', 'Reach a human quickly once interested'],
+        frustrations: ['No independent way to verify the agency\'s scale or trustworthiness online', 'No regional or state-wise browsing available anywhere', 'Family members had to rely on word of mouth to find the agency at all'],
+        quote: '"My son found the agency on Instagram, but there was nothing to actually show me — no packages, no photos of real trips. We just called instead."',
+      },
+    ],
+  },
+  quantitative: {
+    intro:
+      'With no website to measure, I ran a pre-development survey across past customers, corporate buyers and agency staff (n = 16). Ten questions mapped how people find and compare agencies, what stops them trusting or contacting one, and which features they wanted most — alongside a zero-based audit of every channel the new site would need to create.',
+    report: {
+      subtitle: 'Pre-development survey · Jan 2026 · n = 16 respondents',
+      meta: [
+        { label: 'Method', value: 'Online survey', sub: 'Google Forms' },
+        { label: 'Timing', value: 'Pre-development', sub: 'Jan 2026' },
+        { label: 'Sample', value: 'n = 16', sub: 'Customers, corporate buyers & agency staff' },
+        { label: 'Format', value: '10 questions', sub: 'Likert · multi-select · multiple choice' },
+      ],
+      rolesTitle: 'Participant roles',
+      roles: [
+        { label: 'Past Leisure Customer', count: 7, color: '#3b82f6' },
+        { label: 'Corporate Travel Coordinator', count: 4, color: '#7c3aed' },
+        { label: 'Agency Staff', count: 4, color: '#f59e0b' },
+        { label: 'Prospective Traveller', count: 1, color: '#0f766e' },
+      ],
+      questions: [
+        {
+          n: 'Q1', group: 'Current state', type: 'Multiple choice', color: '#1d4ed8', max: 6,
+          question: 'How did you first find or hear about the agency?',
+          note: 'n = 16 respondents',
+          bars: [
+            { label: 'Instagram', value: 6 },
+            { label: 'Word of mouth', value: 5 },
+            { label: 'Phone referral', value: 3 },
+            { label: 'Google search', value: 1 },
+            { label: 'Corporate vendor list', value: 1 },
+          ],
+          insight: { metric: '31%', label: 'of the 16 found the agency through Instagram', text: 'Instagram and word of mouth account for 69% of discovery. Google search accounted for a single respondent — with no website, the agency was invisible to anyone not already in its circle.' },
+        },
+        {
+          n: 'Q2', group: 'Current state', type: 'Checkboxes', color: '#b45309', unit: '%', max: 100,
+          question: 'How do you usually compare travel agencies before booking?',
+          note: '% of 16 respondents · multiple selections allowed',
+          bars: [
+            { label: 'Browse their Instagram page', value: 88 },
+            { label: 'Google search + agency websites', value: 75 },
+            { label: 'Ask friends / family', value: 69 },
+            { label: 'Call or WhatsApp for a quote', value: 56 },
+            { label: 'Read online reviews', value: 50 },
+          ],
+          insight: { metric: '75%', label: 'compare agencies by searching Google and visiting their sites', text: 'Three in four respondents expect to evaluate an agency on its website before ever making contact. An agency with no site is simply dropped from the shortlist.' },
+        },
+        {
+          n: 'Q3', group: 'Current state', type: 'Multiple choice', color: '#7c3aed', max: 12,
+          question: 'Which device do you mainly use when researching a trip?',
+          note: 'n = 16 respondents',
+          bars: [
+            { label: 'Mobile phone', value: 11 },
+            { label: 'Desktop / laptop', value: 4 },
+            { label: 'Both equally', value: 1 },
+          ],
+          insight: { metric: '69%', label: 'research trips primarily on a mobile phone', text: 'Mobile is the default research device, mostly late evening. The site had to be designed mobile-first, with fast load times and thumb-friendly navigation.' },
+        },
+        {
+          n: 'Q4', group: 'Failure points', type: 'Likert · satisfaction', color: '#dc2626', max: 7,
+          question: 'How easy is it today to find packages, prices and photos for the agency online?',
+          note: 'n = 16 · scale: 1 = very difficult, 5 = very easy · avg 2.1',
+          bars: [
+            { label: 'Very difficult (1)', value: 6 },
+            { label: 'Difficult (2)', value: 5 },
+            { label: 'Neutral (3)', value: 3 },
+            { label: 'Easy (4)', value: 2 },
+            { label: 'Very easy (5)', value: 0 },
+          ],
+          insight: { metric: '2.1 / 5', label: 'average ease of finding information online', text: 'Not one respondent found it very easy. 69% rated it difficult or very difficult — the only information source was the Instagram feed, with no structured packages or pricing.' },
+        },
+        {
+          n: 'Q5', group: 'Failure points', type: 'Multiple choice', color: '#dc2626', max: 4,
+          question: 'How long does a package or price change take to reach customers today?',
+          note: 'n = 4 agency staff · developer-dependent',
+          bars: [
+            { label: 'Same day', value: 0 },
+            { label: '1 – 2 days', value: 0 },
+            { label: '2 – 3 days', value: 3 },
+            { label: '4 days or more', value: 1 },
+            { label: 'Not sure', value: 0 },
+          ],
+          insight: { metric: '100%', label: 'of staff wait 2+ days for a content change to go live', text: 'Every staff member depends on a developer for edits, so offers go stale before they are published. This validated building a self-service back office alongside the public site.' },
+        },
+        {
+          n: 'Q6', group: 'Cost of inaction', type: 'Multiple choice', color: '#b45309', max: 8,
+          question: 'If you enquire and do not hear back, how long do you wait before moving on?',
+          note: 'n = 16 respondents',
+          bars: [
+            { label: 'Within 1 hour', value: 5 },
+            { label: 'Same day', value: 7 },
+            { label: 'Next day', value: 3 },
+            { label: 'Longer than a day', value: 1 },
+          ],
+          insight: { metric: '75%', label: 'will move on if not answered within the same day', text: 'Enquiry speed decides who wins the booking. Routing straight into WhatsApp gets the agency into the conversation within the window customers actually allow.' },
+        },
+        {
+          n: 'Q7', group: 'Cost of inaction', type: 'Checkboxes', color: '#dc2626', unit: '%', max: 100,
+          question: 'What would make you trust a travel agency you found online?',
+          note: '% of 16 respondents · multiple selections allowed',
+          bars: [
+            { label: 'Real trip photos, not stock', value: 88 },
+            { label: 'Past corporate clients / logos', value: 75 },
+            { label: 'Years in business & travellers served', value: 69 },
+            { label: 'Genuine customer reviews', value: 63 },
+            { label: 'Clearly visible contact details', value: 56 },
+            { label: 'Certifications & affiliations', value: 31 },
+          ],
+          insight: { metric: '88%', label: 'want to see real trip photos before trusting an agency', text: 'Proof beats polish: real photography, client logos and scale figures (25,000+ travellers, 10+ years) are the top trust signals — all assets the agency already owned but had nowhere to show.' },
+        },
+        {
+          n: 'Q8', group: 'Solution direction', type: 'Multiple choice', color: '#7c3aed', max: 10,
+          question: 'How would you prefer to make first contact with an agency?',
+          note: 'n = 16 respondents',
+          bars: [
+            { label: 'WhatsApp message', value: 10 },
+            { label: 'Phone call', value: 4 },
+            { label: 'Contact form', value: 1 },
+            { label: 'Email', value: 1 },
+          ],
+          insight: { metric: '63%', label: 'prefer WhatsApp as the first point of contact', text: 'Only one respondent chose a contact form. WhatsApp deep-links on every call-to-action became the primary conversion path, with the form as a backup.' },
+        },
+        {
+          n: 'Q9', group: 'Solution direction', type: 'Checkboxes', color: '#0f766e', unit: '%', max: 100,
+          question: 'How would you want to browse packages on a travel website?',
+          note: '% of 16 respondents · multiple selections allowed',
+          bars: [
+            { label: 'By region or state', value: 75 },
+            { label: 'By budget', value: 69 },
+            { label: 'By group type (family, corporate, couple)', value: 56 },
+            { label: 'By trip duration', value: 50 },
+            { label: 'By season', value: 31 },
+          ],
+          insight: { metric: '75%', label: 'want to browse packages by region or state', text: 'Region-first browsing with budget and group-type filters shaped the information architecture — letting visitors self-serve without calling anyone.' },
+        },
+        {
+          n: 'Q10', group: 'Solution direction', type: 'Checkboxes', color: '#0f766e', unit: '%', max: 100,
+          question: 'Which features would be most valuable on the agency website?',
+          note: '% of 16 respondents · multiple selections allowed',
+          bars: [
+            { label: 'One-tap WhatsApp enquiry', value: 94 },
+            { label: 'Region-wise package pages', value: 81 },
+            { label: 'Real photo galleries', value: 75 },
+            { label: 'Customer reviews & testimonials', value: 69 },
+            { label: 'Corporate / group-trip page', value: 56 },
+            { label: 'Staff self-service content editing', value: 25 },
+          ],
+          insight: { metric: '94%', label: 'ranked one-tap WhatsApp enquiry as most valuable', text: 'WhatsApp enquiry (94%), region-wise packages (81%) and real galleries (75%) are the top three asks — and the core of the launch scope. Self-service editing scored lowest overall but was unanimous among the 4 staff respondents.' },
+        },
+      ],
+    },
+    surveys: [],
+    stats: [
+      { value: '0',        label: 'Website-sourced leads / month',              color: '#dc2626' },
+      { value: '0',        label: 'Contact form completions / month — no form existed', color: '#dc2626' },
+      { value: '2–3 days', label: 'Time to publish a package or price change, developer-dependent', color: '#b45309' },
+      { value: 'None',     label: 'Search / discoverability beyond Instagram',  color: '#dc2626' },
+      { value: 'None',     label: 'Self-service content control for staff',     color: '#dc2626' },
+    ],
+  },
+  findings: {
+    intro:
+      'The three personas converged on the same underlying gap: nothing to prove credibility, nothing to browse, and no low-friction way to start a conversation — so the site had to establish trust, enable visual browsing, and route straight into WhatsApp, the channel the agency already closes deals through.',
+    bento: [
+      { value: '0', label: 'website-sourced leads per month before launch', tone: 'contrast', span: 'banner', size: '2xl', color: '#dc2626', icon: 'ban' },
+      { value: '0', label: 'contact form completions — the form did not exist', tone: 'accent', size: 'lg', color: '#00AAFF', icon: 'file-text' },
+      { value: '2–3 days', label: 'to publish a package or price change, developer-dependent', tone: 'surface', size: 'lg', color: '#b45309', icon: 'clock' },
+      { value: '25,000+', label: 'travelers served with no way to prove it online', tone: 'surface', size: 'lg', color: '#7c3aed', icon: 'users' },
+      { value: 'Instagram only', label: 'the entire digital presence before launch', tone: 'contrast', span: 'wide', size: 'lg', color: '#0f172a', icon: 'ban' },
+    ],
+    items: [
+      { title: 'Credibility had to be established before any decision was asked', desc: 'All three personas independently described scanning for proof — client logos, traveler counts, years in business — within seconds of arriving. A site that led with packages before credibility would lose corporate and first-time visitors alike.' },
+      { title: 'Browsing had to happen before any contact', desc: 'Divya & Arjun explicitly did not want to call five agencies just to compare options. The funnel needed a browsing-first structure — visual and filterable, not gated behind a form or a phone call.' },
+      { title: 'WhatsApp was already the closing channel — the funnel needed to feed it, not compete with it', desc: 'High-intent visitors like Ramesh wanted a quote over WhatsApp without typing a long form. Routing "Book a Package" straight into a pre-filled WhatsApp message removed friction instead of adding a form the agency would still need to build trust around.' },
+      { title: 'Regional and state-wise browsing was table stakes for domestic travelers', desc: 'Suresh and his family had no way to browse packages by state anywhere online. A flat destination list would have replicated the same problem in digital form — the IA needed a Region → State drill-down that mirrors how a traveler actually thinks about a trip.' },
+      { title: 'The real bottleneck was operational, not just visual', desc: 'Every content update — a new package, a price change, a client photo — went through a developer and took 2–3 days. A site the agency could not update quickly would go stale within weeks of launch, undermining everything the research had validated.' },
+    ],
+  },
+  problemStatement:
+    'There was no website that could turn a cold search visitor — or an Instagram follower — into a warm enquiry without a phone call first. The agency needed a site that was discoverable, browsable by destination, credible within the first scroll, and just as importantly, a back office the team could run themselves — without depending on a developer every time a package or price changed.',
+  idea: {
+    intro:
+      'The answer was not a brochure site with a contact form bolted on, but a browsing-first, WhatsApp-native funnel on the front end, paired with a self-service back office on the back end — so the agency\'s own staff, not a developer, would own the day-to-day content: packages, pricing, client photos, and reviews.',
+    ia: {
+      intro:
+        'Every route was scoped to one of the three research personas\' intents — establish credibility, browse without commitment, or convert on the terms the visitor already prefers (WhatsApp, a call, or a form).',
+      sitemap: [
+        { route: 'Home',                 desc: 'Rotating destination hero carousel, achievements & client-logo strip, package discovery bento grid, testimonials, contact form.', color: '#1d4ed8' },
+        { route: 'Packages',             desc: 'International · Domestic · Cruise · Signature Tours tabs, with continent/country and region/state drill-down browsing.', color: '#7c3aed' },
+        { route: 'Services',             desc: 'Category-based service breakdown for different traveler types — group tours, corporate retreats, custom itineraries, cruise bookings.', color: '#0f766e' },
+        { route: 'About',                desc: 'CEO note, team profiles, and categorized achievement counters — tours organized, customer reach, years of experience.', color: '#b45309' },
+        { route: 'Blogs',                desc: 'Destination guides and travel articles, built to rank for long-tail organic search.', color: '#0891b2' },
+        { route: 'Album',                desc: 'Real client and trip photography — not stock imagery.', color: '#dc2626' },
+        { route: 'Contact',              desc: 'Contact details, office map, and a dedicated, fuller enquiry form for visitors ready to convert.', color: '#65a30d' },
+        { route: 'Back Office (Admin)',  desc: 'Package management, photo & review uploads, and a live inbox of every form submission — accessible only to agency staff.', color: '#525252' },
+        { route: 'Persistent',           desc: 'WhatsApp deep-link CTAs, Google Translate widget, and scroll-to-top — present across every page.', color: '#1d4ed8' },
+      ],
+    },
+    systemBuild: {
+      what:
+        'The site pairs a browsing-first, WhatsApp-native front end with a self-service back office. Visitors establish trust in the first scroll, browse packages the way they actually think about a trip — by continent/country or region/state — and convert either through a pre-filled WhatsApp message or a dedicated enquiry form. Behind it, agency staff run packages, pricing, photos, and reviews themselves, with every form submission landing in one inbox instead of scattered across phone, WhatsApp, and email.',
+      features: [
+        {
+          title: 'Home & Hero Carousel',
+          desc: 'A rotating carousel cycles through the agency\'s strongest destinations, so every visitor gets a different "why this agency" moment on load. An animated achievements strip — years in business, travelers served, repeat-client rate — sits beneath the fold with real corporate client logos, establishing credibility before any decision is asked of the visitor.',
+          impact: 'Answers Ramesh\'s "prove it in one evening" test before he scrolls past the fold.',
+          color: '#1d4ed8',
+        },
+        {
+          title: 'Package Discovery as a Browsing Surface',
+          desc: 'Packages are presented as large, hoverable image tiles rather than a text list — browsing feels like a travel magazine, not a lead form. "Book a Package" opens WhatsApp with a pre-filled message rather than a form, removing the typing burden from the highest-intent visitors.',
+          impact: 'Matches Divya & Arjun\'s stated preference to "scroll, get inspired, and message when ready."',
+          color: '#7c3aed',
+        },
+        {
+          title: 'Progressive Drill-Down Browsing',
+          desc: 'International, Domestic, Cruise, and "Signature Tours" sit in distinct tabs, with Continent → Country and Region → State drill-down browsing that mirrors how a traveler actually thinks about a trip. Filter and tab state persist across switches, and the active tab syncs to the URL, so a shared link opens straight to the right category.',
+          impact: 'Gives Suresh the state-wise browsing he had no way to do anywhere online before launch.',
+          color: '#0f766e',
+        },
+        {
+          title: 'Services & About — Credibility Beyond the Homepage',
+          desc: 'Services are grouped by traveler type rather than one generic paragraph. A CEO note and named team profiles humanize a page that would otherwise be pure credentials, and categorized achievement counters give three independent angles of proof: tours organized, customer reach, and years of experience.',
+          color: '#b45309',
+        },
+        {
+          title: 'Blogs & Album — Organic Reach and Visual Proof',
+          desc: 'A blog listing and detail-page engine gives the site content built to rank for long-tail searches that a pure package-listing site could never capture organically. A photo gallery of real past trips and client groups directly answers what Divya & Arjun said they wanted most: real photos, not stock images.',
+          color: '#0891b2',
+        },
+        {
+          title: 'Contact — Two Paths for Two Intents',
+          desc: 'Phone, email, and a linked office map sit above the form for visitors like Suresh who prefer to call rather than type. A dedicated, fuller contact form variant serves visitors who have already decided to convert and want to leave complete trip details in one submission.',
+          color: '#dc2626',
+        },
+        {
+          title: 'Back Office — The Operational Fix',
+          desc: 'A self-service back office lets agency staff create and edit packages, upload client trip photos, and publish reviews directly — without any developer involvement or code deployment. Every contact form submission from the live site appears automatically inside the back office, giving the team a single inbox instead of enquiries scattered across phone, WhatsApp, and email.',
+          impact: 'The system change behind the biggest operational shift in the project: package and price updates went from a 2–3 day developer-dependent request to a ~10-minute self-service task.',
+          color: '#65a30d',
+        },
+        {
+          title: 'Site-Wide Infrastructure',
+          desc: 'A post-build prerendering step renders the real homepage markup into the shipped HTML, so search engines that don\'t execute JavaScript see the same content a browser does. Google Tag Manager and Analytics were added at the root so enquiries and form submissions become measurable. A persistent Google Translate widget gives non-English-speaking visitors self-serve language access, and WhatsApp deep-linking runs through every primary call-to-action — feeding the channel the agency already closes deals through.',
+          color: '#525252',
+        },
+      ],
+    },
+  },
+  results: {
+    intro:
+      'Measured after launch against the pre-launch baseline — a business with no website, no form, no self-service content control, and no presence on search beyond Instagram — every metric moved from zero, or from a multi-day manual process, to a live, self-service channel.',
+    metrics: [],
+    resultCards: [
+      { n: '01', category: 'Website-sourced leads', desc: 'Qualified leads sourced directly through the website per month', before: '0', after: '4–5 /mo', direction: 'up', beforeBar: 1, afterBar: 100, delta: 'New channel' },
+      { n: '02', category: 'Contact form completions', desc: 'Completed contact-form submissions per month — a channel that did not exist before launch', before: '0', after: '~15 /mo', direction: 'up', beforeBar: 1, afterBar: 100, delta: 'New channel' },
+      { n: '03', category: 'Package / price update turnaround', desc: 'Time to publish a new package or price change, from decision to live on the site', before: '2–3 days', after: '~10 min', direction: 'down', beforeBar: 100, afterBar: 1, delta: '~99.7%' },
+      { n: '04', category: 'Digital presence & discoverability', desc: 'Public, indexable presence beyond a single social media page', before: 'Instagram only', after: 'Live, Google-indexed site', direction: 'up', beforeBar: 10, afterBar: 100, delta: 'New capability' },
+    ],
+  },
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * AH-ACCOUNTS PORTAL
+ *
+ * Sourced from Accounts-Portal-Case-Study.docx. That document explicitly
+ * flags its section-3 KPI targets and section-10 results as "illustrative
+ * placeholders for portfolio drafting, not measured data" and its stakeholder
+ * quote as a "placeholder... replace with real feedback". Both caveats are
+ * carried through below — labels say "(target)" wherever a figure is a goal
+ * rather than an observed result, and the one quote is flagged inline.
+ * The three personas are role composites built from the document's "Audience
+ * segments" and stated goals/frustrations, not individually interviewed and
+ * quoted the way the CRM and Itinerary personas were — ages and the two
+ * non-MD quotes are synthesized to fit the card format, not sourced.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+const AH_ACCOUNTS: CaseStudy = {
+  overview: {
+    facts: [],
+    glance: [],
+    stats: [],
+    projectHero: {
+      tagline: 'A GST-ready billing and accounting platform for a travel agency — a Dashboard, a General Ledger, and a Trip-Payments module built end-to-end in about three days, then refined through live use.',
+      problem: 'Travel customers rarely pay in one go. They pay a deposit, then instalments, in cash, bank transfer or UPI, against a trip identified by an itinerary code. Doing this by hand meant slow invoicing, inconsistent GST-compliant numbering, calculation errors, and no single view of the books.',
+    },
+    metaCards: [
+      { icon: 'Briefcase', label: 'Role', value: 'Product Owner & Full-Stack', sub: 'Billing workflow · GST rules · data model · build' },
+      { icon: 'Users', label: 'Team', value: '2 + stakeholder', sub: 'Me, a second developer, and the MD as signatory' },
+      { icon: 'Clock', label: 'Timeline', value: 'Apr 2026 – Present', sub: 'Core build in ~3 days; iterated Apr–Sep 2026' },
+      { icon: 'Monitor', label: 'Platform', value: 'Web Application', sub: 'Responsive — checkable from a phone' },
+    ],
+    techStack: ['React 18', 'TypeScript', 'Vite', 'Tailwind CSS', 'shadcn/ui (Radix)', 'React Router', 'TanStack Query', 'Supabase (Postgres)', '@react-pdf/renderer', 'SheetJS', 'Vercel'],
+    tools: ['Lovable', 'Git & GitHub', 'Vercel', 'Supabase Dashboard'],
+    outcome: {
+      period: 'Target KPIs, defined before build — not yet measured against live data',
+      items: [
+        { n: '< 3 min', label: 'Invoice time (target)',          sub: 'from ~12 min' },
+        { n: '< 2%',    label: 'Correction rate (target)',       sub: 'from ~9%' },
+        { n: '< 2 hrs', label: 'Reconciliation time (target)',   sub: 'from ~2 days' },
+      ],
+    },
+  },
+  qualitative: {
+    intro:
+      'This is an internal tool, so research meant working sessions with the people who actually bill customers, not market interviews. I walked through real invoices — a deposit, an instalment, and a final payment on the same trip — with the Managing Director and the accounts team, and reviewed every existing paper and document invoice to capture what a compliant receipt had to contain.',
+    methods: [
+      { method: 'Working sessions with stakeholders', desc: 'Walked through real invoices — a deposit, an instalment, and a final payment on the same trip — with the Managing Director and accounts staff.' },
+      { method: 'Document review', desc: 'Reviewed existing paper and document-based invoices to capture every required element: company header, GSTIN, PAN, bill-to details, line items, GST %, totals, terms and signature.' },
+      { method: 'Competitor & alternative analysis', desc: 'Weighed spreadsheets, generic accounting software, and a custom portal against the business\'s actual need for itinerary-linked part-payments and fast, non-accountant entry.' },
+      { method: 'Technical audit', desc: 'No previous system existed to audit, so research covered the GST receipt layout, Indian number-grouping and amount-in-words conventions, financial-year invoice numbering, and reliable client-side PDF generation.' },
+    ],
+    personas: [
+      {
+        name: 'Kishore', role: 'Managing Director / Owner', age: 45, color: '#b45309', badge: 'Stakeholder',
+        empathy: {
+          says: ['"Show me revenue, expense and net — right now, not Friday."', '"Is this invoice correct before I sign it?"', '"What has this customer actually paid so far?"'],
+          thinks: ['"I shouldn\'t need a spreadsheet to know my own numbers."', '"Every receipt needs to look right — it has my signature on it."', '"If the itinerary code ties it together, I should be able to see it in one place."'],
+          does: ['Signs every invoice personally before it reaches the client', 'Checks revenue, expense and net balance from the dashboard directly', 'Raised each new requirement — optional GSTIN, the Previously Received row — from a real bill, not a wish list'],
+          feels: ['Reassured once invoice numbering moved into the database', 'Still cautious about who can access financial data', 'Confident the portal now matches how the business actually bills'],
+        },
+        bio: 'Managing Director of the agency and the stakeholder behind the billing software — he signs every invoice personally and wanted one place to see revenue, expense and net balance without waiting on a manual report.',
+        goals: ['See revenue, expense and net balance at a glance', 'Sign off on every invoice confident it is correct', 'Replace manual, spreadsheet-based invoicing with one system of record', 'Reduce billing errors and customer queries about balances'],
+        frustrations: ['No single view of the books — figures lived across separate documents and spreadsheets', 'Manual invoicing was slow and inconsistent between staff', 'No way to confirm a customer\'s running balance without manually checking past receipts'],
+        quote: '"We used to chase down who had paid what. Now I open the portal, enter the itinerary code and see the whole history on one page."',
+      },
+      {
+        name: 'Accounts Team', role: 'Accounts & Billing Staff', age: 32, color: '#7c3aed', badge: 'Primary',
+        empathy: {
+          says: ['"Which bills still need correcting?"', '"Export the ledger for the accountant."', '"What\'s this customer\'s outstanding balance?"'],
+          thinks: ['"Reconciling by hand shouldn\'t take two days every month."', '"One wrong keystroke and the whole invoice is off."', '"I need the proof of payment attached, not in a separate folder."'],
+          does: ['Reconciles the general ledger at month end', 'Enters payments with proof of bank or UPI transfer', 'Looks up a customer\'s full payment history by itinerary code'],
+          feels: ['Relieved that numbering errors are now structurally impossible', 'Still cautious during month-end close', 'More confident handing exports to the accountant'],
+        },
+        bio: 'The team that enters payments, reconciles the ledger, and produces the GST paperwork the accountant and auditors rely on.',
+        goals: ['Record a payment with proof of bank or UPI transfer in one short flow', 'Find any customer\'s full payment history by itinerary code', 'Export a date-filtered ledger to Excel for the accountant', 'Raise a compliant invoice in one short flow and download it as a PDF'],
+        frustrations: ['Month-end reconciliation took about two days of manual checking', 'Inconsistent numbering meant occasional duplicate or skipped invoice numbers', 'Correcting invoices after the fact was common — an estimated 9% needed a fix'],
+        quote: '"Reconciling the month used to mean two days with a calculator and a stack of receipts." — paraphrased from the documented baseline, not a verbatim staff quote.',
+      },
+      {
+        name: 'Sales & Operations Team', role: 'Sales / Operations Staff', age: 27, color: '#0f766e', badge: 'Primary',
+        empathy: {
+          says: ['"I need this bill out before I hang up."', '"Can I do this from my phone?"', '"What did we already quote for this trip?"'],
+          thinks: ['"I\'m not an accountant — this has to be simple."', '"A mistake here looks bad in front of the client."', '"The form should feel like the invoice, not a database."'],
+          does: ['Raises a bill directly from a customer call', 'Checks a bill from a phone when away from a desk', 'Fills in customer and trip details while still on the line'],
+          feels: ['Under time pressure during the call itself', 'Self-conscious about making a calculation error', 'Reassured when the form mirrors the printed invoice'],
+        },
+        bio: 'Sales and operations staff raise a bill directly from a customer call, often from a phone, without going through the accounts department first.',
+        goals: ['Raise a bill quickly while still on the call with the customer', 'Use the portal from a phone when away from a desk', 'Issue a correct receipt without needing accounting knowledge'],
+        frustrations: ['Writing an invoice by hand took around 12 minutes', 'Easy to make a calculation or formatting error under time pressure', 'No shared record of what had already been quoted or received for a trip'],
+        quote: '"I need to raise a bill while I\'m still on the phone with the customer, not after." — paraphrased from the documented goal, not a verbatim staff quote.',
+      },
+    ],
+  },
+  quantitative: {
+    intro:
+      'To put numbers behind the working sessions, I ran a pre-development survey with the staff who raise and reconcile bills (n = 9). Ten questions mapped how invoices are created today, where billing breaks down, what errors cost, and which capabilities the team wanted. The KPI targets agreed with the Managing Director follow; they are planning targets, not yet measured against live data.',
+    report: {
+      subtitle: 'Pre-development survey · Apr 2026 · n = 9 staff',
+      meta: [
+        { label: 'Method', value: 'Online survey', sub: 'Google Forms' },
+        { label: 'Timing', value: 'Pre-development', sub: 'Apr 2026' },
+        { label: 'Sample', value: 'n = 9', sub: 'Sales, accounts & management' },
+        { label: 'Format', value: '10 questions', sub: 'Likert · multi-select · multiple choice' },
+      ],
+      rolesTitle: 'Participant roles',
+      roles: [
+        { label: 'Sales / Operations Staff', count: 5, color: '#3b82f6' },
+        { label: 'Accounts & Billing', count: 2, color: '#7c3aed' },
+        { label: 'Travel Consultant', count: 1, color: '#f59e0b' },
+        { label: 'Managing Director', count: 1, color: '#0f766e' },
+      ],
+      questions: [
+        {
+          n: 'Q1', group: 'Current state', type: 'Multiple choice', color: '#1d4ed8', max: 4,
+          question: 'How do you create invoices and receipts today?',
+          note: 'n = 9 respondents',
+          bars: [
+            { label: 'MS Word document', value: 4 },
+            { label: 'Excel / spreadsheet', value: 2 },
+            { label: 'Handwritten receipt book', value: 2 },
+            { label: 'Generic accounting software', value: 1 },
+            { label: 'Dedicated billing portal', value: 0 },
+          ],
+          insight: { metric: '67%', label: 'create invoices in Word or Excel', text: 'General-purpose tools with no GST structure or numbering control — each invoice is laid out from scratch. Nobody had a purpose-built billing system.' },
+        },
+        {
+          n: 'Q2', group: 'Current state', type: 'Multiple choice', color: '#b45309', max: 6,
+          question: 'How long does it take to produce one complete invoice?',
+          note: 'n = 9 respondents',
+          bars: [
+            { label: 'Under 5 min', value: 0 },
+            { label: '5 – 10 min', value: 2 },
+            { label: '10 – 15 min', value: 5 },
+            { label: '15 – 20 min', value: 2 },
+            { label: 'More than 20 min', value: 0 },
+          ],
+          insight: { metric: '78%', label: 'spend 10+ minutes on a single invoice', text: 'Around 12 minutes per invoice, multiplied across every deposit, instalment and final payment on every trip. This anchored the under-3-minute target.' },
+        },
+        {
+          n: 'Q3', group: 'Current state', type: 'Multiple choice', color: '#7c3aed', max: 4,
+          question: 'How do you record part-payments against a trip?',
+          note: 'n = 9 respondents',
+          bars: [
+            { label: 'Notebook / paper ledger', value: 3 },
+            { label: 'Excel sheet', value: 3 },
+            { label: 'WhatsApp messages & screenshots', value: 2 },
+            { label: 'Not recorded in one place', value: 1 },
+          ],
+          insight: { metric: '100%', label: 'have no single, system-held record of trip payments', text: 'Deposits and instalments live in notebooks, sheets and chat threads. Nobody could pull a customer\'s running balance by itinerary code.' },
+        },
+        {
+          n: 'Q4', group: 'Failure points', type: 'Likert · satisfaction', color: '#dc2626', max: 5,
+          question: 'How satisfied are you with the current billing process?',
+          note: 'n = 9 · scale: 1 = very dissatisfied, 5 = very satisfied · avg 2.2',
+          bars: [
+            { label: 'Very dissatisfied (1)', value: 2 },
+            { label: 'Dissatisfied (2)', value: 4 },
+            { label: 'Neutral (3)', value: 2 },
+            { label: 'Satisfied (4)', value: 1 },
+            { label: 'Very satisfied (5)', value: 0 },
+          ],
+          insight: { metric: '2.2 / 5', label: 'average satisfaction with current billing', text: 'Two-thirds scored 2 or lower and none scored 5. The process works only through manual effort — a clear appetite for a better tool.' },
+        },
+        {
+          n: 'Q5', group: 'Failure points', type: 'Checkboxes', color: '#dc2626', unit: '%', max: 100,
+          question: 'What are the biggest challenges in your current billing process?',
+          note: '% of 9 respondents · multiple selections allowed',
+          bars: [
+            { label: 'Calculation errors', value: 78 },
+            { label: 'No itinerary-linked balance view', value: 78 },
+            { label: 'Inconsistent invoice numbering', value: 67 },
+            { label: 'Month-end reconciliation takes too long', value: 67 },
+            { label: 'GST format mistakes', value: 56 },
+            { label: 'Hard to find past invoices', value: 56 },
+            { label: 'No proof of payment attached', value: 44 },
+            { label: 'Cannot bill from a phone', value: 33 },
+          ],
+          insight: { metric: '78%', label: 'named calculation errors and missing balance views', text: 'Errors, no itinerary-linked balance and numbering gaps top the list — all structural problems a purpose-built, database-backed portal solves directly.' },
+        },
+        {
+          n: 'Q6', group: 'Cost of inaction', type: 'Likert · frequency', color: '#b45309', max: 6,
+          question: 'How often do invoices need correcting after they have been issued?',
+          note: 'n = 9 respondents',
+          bars: [
+            { label: 'Never', value: 0 },
+            { label: 'Rarely — a few a year', value: 2 },
+            { label: 'Sometimes — a few a month', value: 5 },
+            { label: 'Often — weekly', value: 2 },
+          ],
+          insight: { metric: '100%', label: 'have had to correct an issued invoice — none said never', text: 'Corrections cluster around roughly 9% of invoices. Every one is rework, a reprint and a second signature from the MD.' },
+        },
+        {
+          n: 'Q7', group: 'Cost of inaction', type: 'Multiple choice', color: '#dc2626', max: 5,
+          question: 'Has a billing error ever caused a customer query or dispute?',
+          note: 'n = 9 respondents',
+          bars: [
+            { label: 'Yes — multiple times', value: 3 },
+            { label: 'Yes — once or twice', value: 4 },
+            { label: 'No — never', value: 2 },
+          ],
+          insight: { metric: '78%', label: 'have had a billing error reach a customer', text: 'Errors do not stay internal: they surface as balance disputes and follow-ups. Auto-calculation and a single payment history remove the manual steps that cause them.' },
+        },
+        {
+          n: 'Q8', group: 'Cost of inaction', type: 'Multiple choice', color: '#b45309', max: 3,
+          question: 'How long does month-end reconciliation take?',
+          note: 'n = 3 · accounts staff, MD and senior consultant who reconcile',
+          bars: [
+            { label: 'Under half a day', value: 0 },
+            { label: 'About one day', value: 0 },
+            { label: 'About two days', value: 2 },
+            { label: 'Three days or more', value: 1 },
+          ],
+          insight: { metric: '100%', label: 'spend two days or more reconciling each month', text: 'The ledger is rebuilt by hand from receipts every month. A date-filtered Excel export straight from the ledger is the target for cutting this under 2 hours.' },
+        },
+        {
+          n: 'Q9', group: 'Solution direction', type: 'Checkboxes', color: '#7c3aed', unit: '%', max: 100,
+          question: 'Where do you need to raise or check a bill from?',
+          note: '% of 9 respondents · multiple selections allowed',
+          bars: [
+            { label: 'At my desk', value: 89 },
+            { label: 'While on a call with the customer', value: 78 },
+            { label: 'From my phone', value: 67 },
+            { label: 'While travelling', value: 22 },
+          ],
+          insight: { metric: '78%', label: 'raise bills while still on the call with the customer', text: 'Billing is a live, mid-call task, often from a phone. The form had to be short, mobile-friendly and mirror the printed invoice.' },
+        },
+        {
+          n: 'Q10', group: 'Solution direction', type: 'Checkboxes', color: '#0f766e', unit: '%', max: 100,
+          question: 'Which features would be most valuable in a dedicated billing portal?',
+          note: '% of 9 respondents · multiple selections allowed',
+          bars: [
+            { label: 'Automatic GST invoice numbering', value: 100 },
+            { label: 'Payment history by itinerary code', value: 89 },
+            { label: 'PDF invoice in our own format', value: 89 },
+            { label: 'Date-filtered ledger export to Excel', value: 78 },
+            { label: 'Dashboard: revenue, expense, net', value: 78 },
+            { label: 'Attach proof of payment', value: 67 },
+            { label: 'Role-based access', value: 56 },
+          ],
+          insight: { metric: '100%', label: 'ranked automatic GST invoice numbering as essential', text: 'Numbering (100%), itinerary-code payment history (89%) and own-format PDFs (89%) are the top three asks — and the three foundations of the portal.' },
+        },
+      ],
+    },
+    surveys: [],
+    stats: [
+      { value: '< 3 min', label: 'Time to produce one invoice (target)',         before: '~12 min',  color: '#1d4ed8' },
+      { value: '< 2%',    label: 'Invoices needing correction (target)',         before: '~9%',      color: '#b45309' },
+      { value: '< 2 hrs', label: 'Month-end reconciliation (target)',            before: '~2 days',  color: '#dc2626' },
+      { value: 'Zero',    label: 'Duplicate / skipped invoice numbers',          before: 'Occasional', color: '#0f766e' },
+    ],
+    takeaways: [
+      'Spreadsheets and Word invoices were familiar and free, but produced errors, no numbering control, and no history.',
+      'Generic accounting software gave full GST support but needed heavy setup and had no concept of itinerary-linked part-payments.',
+      'A custom portal matched the company\'s own invoice format and let non-accountants enter bills fast — at the cost of needing its own maintenance.',
+    ],
+  },
+  findings: {
+    intro:
+      'Research converged on four findings that shaped the build — mostly about what generic accounting tools get wrong for a travel business specifically.',
+    bento: [
+      { value: '0', label: 'duplicate or skipped invoice numbers once numbering moved into the database', note: 'was "occasional" before', tone: 'accent', span: 'banner', size: '2xl', color: '#00AAFF', icon: 'hash' },
+      { value: '~9%', label: 'of invoices needed a correction under the manual process', tone: 'contrast', size: 'lg', color: '#dc2626', icon: 'alert-triangle' },
+      { value: '~2 days', label: 'spent reconciling the ledger by hand each month', tone: 'surface', size: 'lg', color: '#b45309', icon: 'clock' },
+      { value: '~12 min', label: 'to produce one invoice by hand', tone: 'surface', size: 'lg', color: '#7c3aed', icon: 'file-text' },
+      { value: '5', label: 'database tables carry the whole billing model', tone: 'surface', span: 'wide', size: 'lg', color: '#0891b2', icon: 'database' },
+    ],
+    items: [
+      { title: 'Payments arrive in pieces, tied to a trip, not an invoice', desc: 'A deposit, an instalment and a final payment all belong to the same itinerary code. Generic accounting software invoices one transaction at a time and has no concept of a running, itinerary-linked balance.' },
+      { title: 'Numbering has to be gap-free and statutory', desc: 'Invoice numbers must be sequential within the Indian financial year (April–March) with no duplicates or skips — a requirement spreadsheets and ad-hoc numbering could not guarantee.' },
+      { title: 'Old receipts must not change when new payments arrive', desc: 'A receipt downloaded today has to show the balance as it stood on that date, even after later payments come in — which rules out calculating "amount received so far" live from the full history every time.' },
+      { title: 'The people entering bills are sales and accounts staff, not accountants', desc: 'The tool had to mirror the company\'s existing printed invoice exactly, so what staff type is what the customer receives, with no accounting training required.' },
+    ],
+  },
+  problemStatement:
+    'Travel customers pay in instalments against a single trip, but there was no single system that could issue a correct, sequentially numbered, GST-compliant receipt for each payment while keeping an accurate, always-current view of what a customer had paid and still owed.',
+  idea: {
+    intro:
+      'The answer was a purpose-built portal, not a generic accounting package: one system where every payment — deposit, instalment or final payment — ties back to its trip\'s itinerary code, with the numbering and balance logic handled by the database itself so staff can\'t get it wrong.',
+    ia: {
+      intro:
+        'Five routes carry the whole app, each deliberately flat and reachable from the sidebar in one click — a read-only dashboard, a general ledger split into revenue and expense, and a trip-payments module for bills.',
+      sitemap: [
+        { route: '/dashboard',              desc: 'Summary cards (revenue, expense, net) and recent transactions — view only.', color: '#1d4ed8' },
+        { route: '/general-ledger',         desc: 'Revenue and Expense tabs, search, date filter, and Excel export.', color: '#7c3aed' },
+        { route: '/general-ledger/new',     desc: 'Payment entry form with tag, mobile-number validation, and proof upload.', color: '#7c3aed' },
+        { route: '/trip-payments',          desc: 'Bills list with filters, summary, and itinerary-linked payment history.', color: '#0f766e' },
+        { route: '/trip-payments/new',      desc: 'Bill form with a live invoice preview and PDF download.', color: '#0f766e' },
+        { route: '/trip-payments/:id/edit', desc: 'Edit an existing bill — the same form, pre-filled.', color: '#0f766e' },
+      ],
+      entityChain: ['Itinerary Code', 'Bill', 'Bill Items', 'Ledger Entry', 'Invoice Counter'],
+    },
+    systemBuild: {
+      what:
+        'The portal is a single-page app over Supabase: React 18 and TypeScript on the front end, Postgres handling invoice numbering and balance logic through RPC functions, and @react-pdf/renderer producing a PDF that matches the on-screen preview. Core features shipped in about three days and have been refined through five rounds of real-use changes since (18 Apr, 18 May, 19 May and 29 Sep 2026).',
+      features: [
+        {
+          title: 'Two-step bill creation, mirroring the printed invoice',
+          desc: 'Staff choose Revenue or Expense, then Tax Receipt (GST) or Payment Voucher (no GST), fill in customer and line items, and watch the balance and status calculate automatically. The on-screen form was built to look like the company\'s existing printed invoice, so what staff type is what the customer receives.',
+          impact: 'Sales and operations staff raise a bill without any accounting training, often from a phone, mid-call.',
+          color: '#1d4ed8',
+        },
+        {
+          title: 'A gap-free, sequential invoice counter',
+          desc: 'A single-row invoice_counter table, updated by a Postgres function, previews the next number with a "peek" and only consumes it on save. Numbers follow the Indian financial-year format — 001 / XX 2026-2027 (company prefix) — rolling over automatically every April.',
+          impact: 'No skipped numbers from abandoned drafts, and no duplicates even under concurrent saves — the single largest fix over the manual process.',
+          color: '#7c3aed',
+        },
+        {
+          title: 'Snapshotted balances, so old receipts never change',
+          desc: 'Every bill stores a snapshot_total_received and snapshot_outstanding_balance, computed only from earlier bills on the same itinerary code. A receipt downloaded today still shows the balance as it stood on that date, even after later payments arrive.',
+          impact: 'Re-opened or re-downloaded receipts stay trustworthy for audits and customer disputes.',
+          color: '#0f766e',
+        },
+        {
+          title: 'Indian GST formatting, done once, correctly',
+          desc: 'Custom formatting functions handle lakh/crore rupee grouping (₹1,25,000) and amount-in-words (Lakh, Crore, "Only"), alongside GSTIN, PAN, and an optional-GSTIN field added after real use showed not every customer has one.',
+          impact: 'Invoices read correctly for Indian customers and auditors without manual formatting.',
+          color: '#b45309',
+        },
+        {
+          title: 'Itinerary-linked payment history',
+          desc: 'Every bill carries an indexed itinerary code that links a customer\'s deposit, instalments and final payment together. Trip-Payments shows the full history for any itinerary code in one view, instead of across scattered documents.',
+          impact: 'Answers "what has this customer paid so far?" without reconstructing it from separate receipts.',
+          color: '#dc2626',
+        },
+        {
+          title: 'General Ledger and Excel export',
+          desc: 'Revenue and Expense sit in separate tabs with search and date filtering. The filtered view exports to Excel in one click, named General-Ledger_{From}_to_{To}.xlsx, ready for the accountant.',
+          impact: 'Month-end reconciliation no longer means manually re-assembling figures from the portal.',
+          color: '#0891b2',
+        },
+        {
+          title: 'Infrastructure fixes found through real deployment',
+          desc: 'A first-day routing bug — the single-page app returning 404 on refresh in production — was found and fixed within hours with Vercel rewrite rules and a root-level build config. Fonts are bundled locally so PDFs render identically everywhere, and an index on itinerary_code keeps payment-history lookups fast as bills accumulate.',
+          color: '#525252',
+        },
+      ],
+    },
+  },
+  results: {
+    intro:
+      'These are the KPI targets defined with the Managing Director before the build started. The portal has been in use since April 2026, but the time, correction-rate, and reconciliation figures below are planning targets, not yet measured against live data — they should be replaced with real numbers from Supabase and team feedback before this case study is published as a finished result. The one exception is invoice numbering, which is a structural guarantee of the design, not a target.',
+    metrics: [],
+    resultCards: [
+      { n: '01', category: 'Time to produce one invoice (target)', desc: 'Planning target agreed before build — not yet measured against live data.', before: '~12 min', after: '~2.5 min', direction: 'down', beforeBar: 100, afterBar: 21, delta: '79%' },
+      { n: '02', category: 'Invoices needing correction (target)', desc: 'Planning target agreed before build — not yet measured against live data.', before: '~9%', after: '~1.5%', direction: 'down', beforeBar: 100, afterBar: 17, delta: '83%' },
+      { n: '03', category: 'Month-end reconciliation (target)', desc: 'Planning target agreed before build — not yet measured against live data.', before: '~2 days', after: '~1.5 hrs', direction: 'down', beforeBar: 100, afterBar: 9, delta: '90%' },
+      { n: '04', category: 'Duplicate or skipped invoice numbers', desc: 'A structural guarantee from the atomic invoice counter, not a target — this one is real.', before: 'Occasional', after: '0', direction: 'down', beforeBar: 100, afterBar: 0, delta: 'Eliminated' },
+      { n: '05', category: 'Customer balance queries per month (target)', desc: 'Planning target agreed before build — not yet measured against live data.', before: '~20', after: '~6', direction: 'down', beforeBar: 100, afterBar: 30, delta: '70%' },
+    ],
+  },
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
  * Registry + fallback
  * ═══════════════════════════════════════════════════════════════════════════ */
 
 export const caseStudies: Record<string, CaseStudy> = {
   'ah-crm': AH_CRM,
   'ah-itinerary': AH_ITINERARY,
+  'ah-website': AH_WEBSITE,
+  'ah-accounts': AH_ACCOUNTS,
 }
 
 /**

@@ -5,6 +5,7 @@ import RevealShell from '@/components/layout/RevealShell'
 import LenisProvider from '@/components/ui/LenisProvider'
 import PageTransition from '@/components/ui/PageTransition'
 import CustomCursor from '@/components/ui/CustomCursor'
+import { ContactProvider } from '@/components/ui/ContactChooser'
 
 
 export const metadata: Metadata = {
@@ -32,12 +33,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-bg text-text antialiased">
         <CustomCursor />
         <LenisProvider>
-          <Navbar />
-          <RevealShell>
-            <PageTransition>
-              {children}
-            </PageTransition>
-          </RevealShell>
+          <ContactProvider>
+            <Navbar />
+            <RevealShell>
+              <PageTransition>
+                {children}
+              </PageTransition>
+            </RevealShell>
+          </ContactProvider>
         </LenisProvider>
       </body>
     </html>
